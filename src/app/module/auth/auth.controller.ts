@@ -27,7 +27,7 @@ const registerPatient = catchAsync(async (req: Request, res: Response) => {
 	const payload = req.body;
 
 	const result = await AuthService.registerPatient(
-		payload.data as unknown as any,
+		payload as any,
 	);
 
 	const { accessToken, refreshToken, user, patient } = result;
