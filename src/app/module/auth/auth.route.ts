@@ -9,28 +9,6 @@ const router = Router();
 
 router.post(
 	"/register",
-	// (req: Request, res: Response, next: NextFunction) => {
-	// 	try {
-	// 		const payload = req.body ?? {};
-
-	// 		const result =
-	// 			PatientAuthValidation.PatientRegistrationZodSchema.safeParse(payload);
-
-	// 		if (!result.success) {
-	// 			console.log(result.error);
-	// 			console.log(result.error.issues);
-
-	// 			throw new Error(result.error.issues[0].message);
-	// 		}
-
-	// 		req.body = result.data;
-
-	// 		next();
-	// 	} catch (error) {
-	// 		next(error);
-	// 	}
-	// },
-
 	validateRequest(userAuthValidation.PatientRegistrationZodSchema),
 	AuthController.registerPatient,
 );
@@ -46,5 +24,15 @@ router.get(
 );
 router.post("/refresh-token", AuthController.refreshToken);
 router.post("/google", AuthController.googleLogin);
+router.post(
+	"/forgot-password",
+	validateRequest(userAuthValidation.ForgotPassword),
+	AuthController.forgotPassword
+);
+router.post(
+	"/reset-password",
+	validateRequest(userAuthValidation.ResetPassword),
+	AuthController.resetPassword
+);
 
 export const AuthRoutes = router;

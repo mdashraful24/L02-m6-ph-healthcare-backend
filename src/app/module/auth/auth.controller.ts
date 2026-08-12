@@ -1,29 +1,12 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
 import type { Request, Response } from "express";
 import httpStatus from "http-status";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import type { IRequestUser } from "./auth.interface";
 import { AuthService } from "./auth.service";
-import { PatientAuthValidation } from "./auth.validation";
 
 const registerPatient = catchAsync(async (req: Request, res: Response) => {
-	// const payload = PatientAuthValidation.PatientRegistrationZodSchema.safeParse(
-	// 	req.body,
-	// );
-
-	// if (!payload.success) {
-	// 	// let errorMessage = "";
-
-	// 	// payload.error.issues.forEach((issue) => {
-	// 	// 	errorMessage = errorMessage.concat(issue.message, ", ");
-	// 	// 	// errorMessage = errorMessage + issue.message + ", ";
-	// 	// });
-
-	// 	// throw new Error(errorMessage);
-	// 	throw new Error(payload.error.issues[0].message);
-	// 	// throw new Error(`Invalid request payload: ${payload.error.issues[0].message}`);
-	// }
-
 	const payload = req.body;
 
 	const result = await AuthService.registerPatient(
@@ -165,10 +148,38 @@ const googleLogin = catchAsync(async (req: Request, res: Response) => {
 	});
 });
 
+const forgotPassword = catchAsync(async (req: Request, res: Response) => {
+	const payload = req.body;
+
+	await AuthService.forgotPassword(payload);
+
+	sendResponse(res, {
+		statusCode: httpStatus.OK,
+		success: true,
+		message: `Otp sent to your email ${payload.email}`,
+		data: null,
+	});
+});
+
+const resetPassword = catchAsync(async (req: Request, res: Response) => {
+	const payload = req.body;
+
+	await AuthService.resetPassword(payload);
+
+	sendResponse(res, {
+		statusCode: httpStatus.OK,
+		success: true,
+		message: "Password has been reset successfully",
+		data: null,
+	});
+});
+
 export const AuthController = {
 	registerPatient,
 	loginUser,
 	getMe,
 	refreshToken,
 	googleLogin,
+	forgotPassword,
+	resetPassword,
 };
