@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import ejs from "ejs";
 import type { TokenPayload } from "google-auth-library";
 import type { JwtPayload, SignOptions } from "jsonwebtoken";
 import {
@@ -9,7 +10,9 @@ import {
 } from "../../../generated/prisma/enums";
 import config from "../../config";
 import { googleClient } from "../../lib/googleAuth";
+import { transporter } from "../../lib/nodemailer";
 import { prisma } from "../../lib/prisma";
+import { redisClient } from "../../lib/redis";
 import { jwtUtils } from "../../utils/jwt";
 import type {
 	IForgotPasswordPayload,
@@ -19,7 +22,7 @@ import type {
 	IRequestUser,
 	IResetPasswordPayload,
 } from "./auth.interface";
-import { redisClient } from "../../lib/redis";
+import path from "path";
 
 const registerPatient = async (payload: IRegisterPatientPayload) => {
 	const { name, password, patient: patientData } = payload;
@@ -383,11 +386,32 @@ const forgotPassword = async (payload: IForgotPasswordPayload) => {
 
 	const key = `forgot-password:${isUserExists.email}`
 
+	const expirationInSeconds = 5 * 60;
+
 	await redisClient.set(key, otp, {
 		expiration: {
 			type: "EX",
-			value: 5 * 60
+			value: expirationInSeconds
 		}
+	});
+
+	const templatePath = path.join(process.cwd(), "src/app/templates/forgot-password.ejs");
+
+	const templateData = {
+		name: isUserExists.name,
+		otp,
+		expirationInMinutes: expirationInSeconds / 60
+	};
+
+	const html = await ejs.renderFile(templatePath, templateData);
+
+	await transporter.sendMail({
+		from: config.email_sender,
+		to: isUserExists.email,
+		subject: "Password Reset OTP - PH Healthcare Management System",
+		// text: `Your OTP for reset password is: ${otp}. It will be valid for 5 minutes.`,
+		// html: `<h1>PH Healthcare</h1><p>Your OTP for reset password is: ${otp}. It will be valid for 5 minutes.</p>`
+		html
 	});
 };
 
@@ -441,6 +465,23 @@ const resetPassword = async (payload: IResetPasswordPayload) => {
 	});
 
 	await redisClient.del([key]);
+
+	const templatePath = path.join(process.cwd(), "src/app/templates/reset-password-success.ejs");
+
+	const templateData = {
+		name: isUserExists.name
+	};
+
+	const html = await ejs.renderFile(templatePath, templateData);
+
+	await transporter.sendMail({
+		from: config.email_sender,
+		to: isUserExists.email,
+		subject: "Password Reset Successful - PH Healthcare Management System",
+		// text: `Your OTP for reset password is: ${otp}. It will be valid for 5 minutes.`,
+		// html: `<h2>PH Healthcare</h2><p>Your password has been reset successfully.</p>`
+		html
+	});
 };
 
 export const AuthService = {
