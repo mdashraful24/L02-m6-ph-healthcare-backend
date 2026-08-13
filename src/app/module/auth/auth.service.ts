@@ -165,6 +165,25 @@ const verifyPatientEmail = async (payload: IVerifyEmailPayload) => {
 
 	await redisClient.del(patientRegistrationKey);
 
+	const templatePath = path.join(
+		process.cwd(),
+		"src/app/templates/patient-welcome-email.ejs",
+	);
+
+	const templateData = {
+		name: createdUser.name,
+		email: createdUser.email
+	};
+
+	const html = await ejs.renderFile(templatePath, templateData);
+
+	await transporter.sendMail({
+		from: config.email_sender,
+		to: createdUser.email,
+		subject: "Welcome to PH Healthcare - Your Account is Verified",
+		html,
+	});
+
 	const { patient, ...user } = createdUser;
 	const jwtPayload = {
 		userId: user.id,
@@ -392,6 +411,26 @@ const googleLogin = async (payload: IGoogleLoginPayload) => {
 					googleId: googleIdTokenPayload.sub,
 				},
 			});
+
+			const templatePath = path.join(
+				process.cwd(),
+				"src/app/templates/inform-google-sign-in-enabled.ejs",
+			);
+
+			const templateData = {
+				name: user.name,
+				email: user.email
+			};
+
+			const html = await ejs.renderFile(templatePath, templateData);
+
+			await transporter.sendMail({
+				from: config.email_sender,
+				to: user.email,
+				subject: "Google Sign-In Enabled - PH Healthcare Management System",
+				html,
+			});
+
 		} else {
 			// Google Register Patient
 			user = await prisma.user.create({
@@ -410,24 +449,26 @@ const googleLogin = async (payload: IGoogleLoginPayload) => {
 					},
 				},
 			});
-		}
 
-		user = await prisma.user.create({
-			data: {
-				name: googleIdTokenPayload.name,
-				email: googleIdTokenPayload.email,
-				role: Role.PATIENT,
-				googleId: googleIdTokenPayload.sub,
-				authProvider: AuthProvider.GOOGLE,
-				emailVerified: true,
-				patient: {
-					create: {
-						name: googleIdTokenPayload.name,
-						email: googleIdTokenPayload.email,
-					},
-				},
-			},
-		});
+			const templatePath = path.join(
+				process.cwd(),
+				"src/app/templates/patient-welcome-email.ejs",
+			);
+
+			const templateData = {
+				name: user.name,
+				email: user.email
+			};
+
+			const html = await ejs.renderFile(templatePath, templateData);
+
+			await transporter.sendMail({
+				from: config.email_sender,
+				to: user.email,
+				subject: "Welcome to PH Healthcare - Your Account is Verified",
+				html,
+			});
+		}
 	}
 
 	if (!user) {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Reset Successful - PH Healthcare</title>
+    <title>Welcome to PH Healthcare</title>
 </head>
 
 <body style="
@@ -69,7 +69,7 @@
 
             <!-- Content -->
             <div style="
-                padding:40px 35px;
+                padding:40px 35px 20px;
                 text-align:center;
             ">
 
@@ -80,7 +80,6 @@
                     margin:0 auto 20px;
                     background:#dbeafe;
                     border-radius:50%;
-                    text-align:center;
                     line-height:64px;
                     color:#2563eb;
                     font-size:30px;
@@ -89,19 +88,18 @@
                     ✓
                 </div>
 
-                <!-- Heading -->
+                <!-- Welcome Heading -->
                 <h2 style="
                     margin:0 0 12px;
                     color:#0f172a;
-                    font-size:24px;
+                    font-size:26px;
                     line-height:1.3;
                 ">
-                    Password Reset Successful
+                    Welcome to PH Healthcare!
                 </h2>
 
-                <!-- Greeting -->
                 <p style="
-                    margin:0 0 10px;
+                    margin:0 0 8px;
                     color:#334155;
                     font-size:15px;
                     line-height:1.6;
@@ -109,20 +107,19 @@
                     Hi <strong><%= name %></strong>,
                 </p>
 
-                <!-- Description -->
                 <p style="
-                    max-width:480px;
+                    max-width:490px;
                     margin:0 auto;
                     color:#64748b;
                     font-size:15px;
                     line-height:1.7;
                 ">
-                    Your PH Healthcare account password has been
-                    successfully reset. You can now sign in using
-                    your new password.
+                    Your email has been successfully verified and your
+                    patient account is now active. We're happy to have
+                    you with us.
                 </p>
 
-                <!-- Security Message -->
+                <!-- Account Information -->
                 <div style="
                     margin:30px 0 0;
                     padding:18px 20px;
@@ -133,16 +130,71 @@
                 ">
 
                     <p style="
+                        margin:0 0 10px;
+                        color:#1e40af;
+                        font-size:14px;
+                        font-weight:600;
+                    ">
+                        Your account is ready
+                    </p>
+
+                    <p style="
                         margin:0;
-                        color:#475569;
+                        color:#64748b;
                         font-size:13px;
                         line-height:1.7;
                     ">
-                        <strong style="color:#1d4ed8;">
-                            Your account is secure.
+                        <strong style="color:#334155;">
+                            Email:
                         </strong>
-                        If you did not make this change, please contact
-                        our support team immediately.
+                        <%= email %>
+                    </p>
+
+                    <p style="
+                        margin:5px 0 0;
+                        color:#64748b;
+                        font-size:13px;
+                        line-height:1.7;
+                    ">
+                        <strong style="color:#334155;">
+                            Account:
+                        </strong>
+                        Patient
+                    </p>
+
+                    <p style="
+                        margin:5px 0 0;
+                        color:#64748b;
+                        font-size:13px;
+                        line-height:1.7;
+                    ">
+                        <strong style="color:#334155;">
+                            Status:
+                        </strong>
+                        <span style="color:#2563eb; font-weight:600;">
+                            Verified
+                        </span>
+                    </p>
+
+                </div>
+
+                <!-- Closing Message -->
+                <div style="
+                    margin-top:30px;
+                ">
+
+                    <p style="
+                        margin:0;
+                        color:#64748b;
+                        font-size:13px;
+                        line-height:1.7;
+                    ">
+                        Thank you for choosing
+                        <strong style="color:#2563eb;">
+                            PH Healthcare.
+                        </strong>
+                        We are committed to making your healthcare
+                        experience simple, convenient, and reliable.
                     </p>
 
                 </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Reset Successful - PH Healthcare</title>
+    <title>Google Sign-In Enabled - PH Healthcare</title>
 </head>
 
 <body style="
@@ -69,18 +69,17 @@
 
             <!-- Content -->
             <div style="
-                padding:40px 35px;
+                padding:40px 35px 20px;
                 text-align:center;
             ">
 
-                <!-- Success Icon -->
+                <!-- Notification Icon -->
                 <div style="
                     width:64px;
                     height:64px;
                     margin:0 auto 20px;
                     background:#dbeafe;
                     border-radius:50%;
-                    text-align:center;
                     line-height:64px;
                     color:#2563eb;
                     font-size:30px;
@@ -96,7 +95,7 @@
                     font-size:24px;
                     line-height:1.3;
                 ">
-                    Password Reset Successful
+                    Google Sign-In Enabled
                 </h2>
 
                 <!-- Greeting -->
@@ -111,24 +110,69 @@
 
                 <!-- Description -->
                 <p style="
-                    max-width:480px;
+                    max-width:500px;
                     margin:0 auto;
                     color:#64748b;
                     font-size:15px;
                     line-height:1.7;
                 ">
-                    Your PH Healthcare account password has been
-                    successfully reset. You can now sign in using
-                    your new password.
+                    Your PH Healthcare account has been successfully
+                    connected with Google. You can now sign in to your
+                    account using your Google account.
                 </p>
 
-                <!-- Security Message -->
+                <!-- Login Information -->
                 <div style="
                     margin:30px 0 0;
-                    padding:18px 20px;
+                    padding:20px;
                     background:#eff6ff;
                     border:1px solid #bfdbfe;
                     border-radius:10px;
+                    text-align:left;
+                ">
+
+                    <p style="
+                        margin:0 0 12px;
+                        color:#1e40af;
+                        font-size:14px;
+                        font-weight:600;
+                    ">
+                        Sign-in information
+                    </p>
+
+                    <p style="
+                        margin:0 0 8px;
+                        color:#64748b;
+                        font-size:13px;
+                        line-height:1.6;
+                    ">
+                        <strong style="color:#334155;">
+                            Email:
+                        </strong>
+                        <%= email %>
+                    </p>
+
+                    <p style="
+                        margin:0;
+                        color:#64748b;
+                        font-size:13px;
+                        line-height:1.6;
+                    ">
+                        <strong style="color:#334155;">
+                            Sign-in method:
+                        </strong>
+                        Google
+                    </p>
+
+                </div>
+
+                <!-- Credentials Account Notice -->
+                <div style="
+                    margin-top:20px;
+                    padding:18px 20px;
+                    background:#f8fafc;
+                    border-left:4px solid #2563eb;
+                    border-radius:6px;
                     text-align:left;
                 ">
 
@@ -138,11 +182,38 @@
                         font-size:13px;
                         line-height:1.7;
                     ">
-                        <strong style="color:#1d4ed8;">
-                            Your account is secure.
+                        <strong style="color:#1e40af;">
+                            Your password is still active.
                         </strong>
-                        If you did not make this change, please contact
-                        our support team immediately.
+                        Your existing email and password credentials
+                        have not been removed or changed. You can continue
+                        to use your credentials-based login whenever you
+                        prefer.
+                    </p>
+
+                </div>
+
+                <!-- Security Notice -->
+                <div style="
+                    margin-top:25px;
+                    padding-top:20px;
+                    border-top:1px solid #e2e8f0;
+                    text-align:left;
+                ">
+
+                    <p style="
+                        margin:0;
+                        color:#64748b;
+                        font-size:13px;
+                        line-height:1.7;
+                    ">
+                        <strong style="color:#334155;">
+                            Wasn't you?
+                        </strong>
+                        If you did not connect or use Google sign-in
+                        with your PH Healthcare account, please secure
+                        your account and contact our support team
+                        immediately.
                     </p>
 
                 </div>
@@ -172,7 +243,8 @@
                     font-size:12px;
                     line-height:1.5;
                 ">
-                    This is an automated email. Please do not reply.
+                    This is an automated security notification.
+                    Please do not reply.
                 </p>
 
                 <p style="
