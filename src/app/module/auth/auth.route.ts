@@ -13,6 +13,11 @@ router.post(
 	AuthController.registerPatient,
 );
 router.post(
+	"/verify-email",
+	validateRequest(userAuthValidation.PatientEmailVerificationZodSchema),
+	AuthController.verifyPatientEmail,
+);
+router.post(
 	"/login",
 	validateRequest(userAuthValidation.UserLoginZodSchema),
 	AuthController.loginUser,
@@ -27,12 +32,12 @@ router.post("/google", AuthController.googleLogin);
 router.post(
 	"/forgot-password",
 	validateRequest(userAuthValidation.ForgotPassword),
-	AuthController.forgotPassword
+	AuthController.forgotPassword,
 );
 router.post(
 	"/reset-password",
 	validateRequest(userAuthValidation.ResetPassword),
-	AuthController.resetPassword
+	AuthController.resetPassword,
 );
 
 export const AuthRoutes = router;

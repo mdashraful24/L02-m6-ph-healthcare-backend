@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Account - PH Healthcare</title>
+</head>
+
+<body style="
+    margin:0;
+    padding:0;
+    background:#eff6ff;
+    font-family:Arial, Helvetica, sans-serif;
+    color:#1e293b;
+">
+
+    <div style="
+        max-width:620px;
+        margin:40px auto;
+        padding:0 15px;
+    ">
+
+        <!-- Main Card -->
+        <div style="
+            background:#ffffff;
+            border-radius:16px;
+            overflow:hidden;
+            box-shadow:0 8px 30px rgba(15, 23, 42, 0.08);
+        ">
+
+            <!-- Header -->
+            <div style="
+                background:#2563eb;
+                padding:35px 30px;
+                text-align:center;
+            ">
+
+                <!-- Logo -->
+                <div style="
+                    width:56px;
+                    height:56px;
+                    margin:0 auto 12px;
+                    background:#ffffff;
+                    border-radius:14px;
+                    line-height:56px;
+                    font-size:28px;
+                ">
+                    🩺
+                </div>
+
+                <h1 style="
+                    margin:0;
+                    color:#ffffff;
+                    font-size:26px;
+                    font-weight:700;
+                ">
+                    PH Healthcare
+                </h1>
+
+                <p style="
+                    margin:8px 0 0;
+                    color:#dbeafe;
+                    font-size:14px;
+                ">
+                    Healthcare Management System
+                </p>
+
+            </div>
+
+            <!-- Content -->
+            <div style="padding:40px 35px;">
+
+                <!-- Greeting -->
+                <p style="
+                    margin:0 0 8px;
+                    color:#334155;
+                    font-size:15px;
+                    line-height:1.6;
+                ">
+                    Hi <strong><%= name %></strong>,
+                </p>
+
+                <!-- Heading -->
+                <h2 style="
+                    margin:0 0 15px;
+                    color:#0f172a;
+                    font-size:24px;
+                    line-height:1.3;
+                ">
+                    Verify Your Account
+                </h2>
+
+                <!-- Description -->
+                <p style="
+                    margin:0;
+                    color:#64748b;
+                    font-size:15px;
+                    line-height:1.7;
+                ">
+                    Welcome to PH Healthcare! To complete your registration
+                    and verify your email address, please enter the
+                    verification code below.
+                </p>
+
+                <!-- Email Information -->
+                <div style="
+                    margin:25px 0 0;
+                    padding:14px 18px;
+                    background:#f8fafc;
+                    border:1px solid #e2e8f0;
+                    border-radius:8px;
+                ">
+
+                    <p style="
+                        margin:0 0 5px;
+                        color:#94a3b8;
+                        font-size:12px;
+                    ">
+                        Email address
+                    </p>
+
+                    <p style="
+                        margin:0;
+                        color:#334155;
+                        font-size:14px;
+                        font-weight:600;
+                        word-break:break-word;
+                    ">
+                        <%= email %>
+                    </p>
+
+                </div>
+
+                <!-- OTP Section -->
+                <div style="
+                    margin:25px 0 30px;
+                    padding:26px 20px;
+                    text-align:center;
+                    background:#eff6ff;
+                    border:1px solid #bfdbfe;
+                    border-radius:12px;
+                ">
+
+                    <p style="
+                        margin:0 0 14px;
+                        color:#64748b;
+                        font-size:13px;
+                    ">
+                        Your verification code
+                    </p>
+
+                    <div style="
+                        display:inline-block;
+                        padding:14px 28px;
+                        background:#ffffff;
+                        border:2px solid #3b82f6;
+                        border-radius:10px;
+                    ">
+                        <span style="
+                            color:#1d4ed8;
+                            font-size:32px;
+                            font-weight:700;
+                            letter-spacing:8px;
+                        ">
+                            <%= otp %>
+                        </span>
+                    </div>
+
+                    <p style="
+                        margin:14px 0 0;
+                        color:#64748b;
+                        font-size:12px;
+                    ">
+                        Enter this code to verify your email address.
+                    </p>
+
+                </div>
+
+                <!-- Expiration Notice -->
+                <div style="
+                    padding:15px 18px;
+                    background:#f8fafc;
+                    border-left:4px solid #2563eb;
+                    border-radius:6px;
+                ">
+
+                    <p style="
+                        margin:0;
+                        color:#475569;
+                        font-size:13px;
+                        line-height:1.6;
+                    ">
+                        <strong style="color:#1e40af;">
+                            Verification code expires soon.
+                        </strong>
+                        This code is valid for
+                        <strong>
+                            <%= expirationInMinutes %> minutes
+                        </strong>.
+                    </p>
+
+                </div>
+
+                <!-- Security Message -->
+                <div style="
+                    margin-top:25px;
+                    padding-top:20px;
+                    border-top:1px solid #e2e8f0;
+                ">
+
+                    <p style="
+                        margin:0;
+                        color:#64748b;
+                        font-size:13px;
+                        line-height:1.7;
+                    ">
+                        <strong style="color:#334155;">
+                            Didn't create an account?
+                        </strong>
+                        You can safely ignore this email. No account
+                        verification will be completed without entering
+                        this verification code.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            <div style="
+                padding:24px 30px;
+                background:#f8fafc;
+                border-top:1px solid #e2e8f0;
+                text-align:center;
+            ">
+
+                <p style="
+                    margin:0 0 7px;
+                    color:#334155;
+                    font-size:13px;
+                    font-weight:600;
+                ">
+                    PH Healthcare Management System
+                </p>
+
+                <p style="
+                    margin:0;
+                    color:#94a3b8;
+                    font-size:12px;
+                    line-height:1.5;
+                ">
+                    This is an automated email. Please do not reply.
+                </p>
+
+                <p style="
+                    margin:10px 0 0;
+                    color:#94a3b8;
+                    font-size:11px;
+                ">
+                    &copy; <%= new Date().getFullYear() %> PH Healthcare.
+                    All rights reserved.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
