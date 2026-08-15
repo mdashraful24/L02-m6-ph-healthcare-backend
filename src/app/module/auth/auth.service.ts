@@ -172,7 +172,7 @@ const verifyPatientEmail = async (payload: IVerifyEmailPayload) => {
 
 	const templateData = {
 		name: createdUser.name,
-		email: createdUser.email
+		email: createdUser.email,
 	};
 
 	const html = await ejs.renderFile(templatePath, templateData);
@@ -419,7 +419,7 @@ const googleLogin = async (payload: IGoogleLoginPayload) => {
 
 			const templateData = {
 				name: user.name,
-				email: user.email
+				email: user.email,
 			};
 
 			const html = await ejs.renderFile(templatePath, templateData);
@@ -430,7 +430,6 @@ const googleLogin = async (payload: IGoogleLoginPayload) => {
 				subject: "Google Sign-In Enabled - PH Healthcare Management System",
 				html,
 			});
-
 		} else {
 			// Google Register Patient
 			user = await prisma.user.create({
@@ -457,7 +456,7 @@ const googleLogin = async (payload: IGoogleLoginPayload) => {
 
 			const templateData = {
 				name: user.name,
-				email: user.email
+				email: user.email,
 			};
 
 			const html = await ejs.renderFile(templatePath, templateData);
