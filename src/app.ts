@@ -35,7 +35,7 @@ app.use("/api/v1/user", UserRoutes);
 app.get("/", async (req: Request, res: Response) => {
 	res.status(httpStatus.OK).json({
 		success: true,
-		message: "Welcome to PH Healthcare System Backend",
+		message: "Welcome to PH Healthcare Management System Backend",
 	});
 });
 
