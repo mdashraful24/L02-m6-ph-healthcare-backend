@@ -141,6 +141,18 @@ export const seedTesterDoctor = async () => {
 				role: Role.DOCTOR,
 				needPasswordChange: false,
 				emailVerified: true,
+				doctor: {
+					create: {
+						email,
+						name,
+						address: "123 Main St, City, Country",
+						contactNumber: "123-456-7890",
+						licenseNumber: "DOC123456",
+						qualifications: "MBBS, BCS, MS in Neurosurgery",
+						specialization: "Neurosurgery",
+						experienceYears: 5,
+					}
+				}
 			},
 		});
 
