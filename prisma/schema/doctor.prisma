@@ -21,7 +21,8 @@ model Doctor {
   reviewedAt         DateTime?
 
   resume              String?
-  additionalDocuments String[]
+  resumePublicId      String?
+  additionalDocuments Json? // stores: [{url: "...", publicId: "..."}]
 
   isDeleted Boolean   @default(false)
   deletedAt DateTime?

@@ -151,8 +151,8 @@ export const seedTesterDoctor = async () => {
 						qualifications: "MBBS, BCS, MS in Neurosurgery",
 						specialization: "Neurosurgery",
 						experienceYears: 5,
-					}
-				}
+					},
+				},
 			},
 		});
 

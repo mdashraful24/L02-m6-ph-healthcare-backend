@@ -5,23 +5,27 @@ import { AppointmentController } from "./appointment.controller";
 
 const router = Router();
 
-router.post("/book-appointment",
-    auth(Role.PATIENT),
-    AppointmentController.bookAppointment
+router.post(
+	"/book-appointment",
+	auth(Role.PATIENT),
+	AppointmentController.bookAppointment,
 );
 
-router.post("/pay-appointment",
-    auth(Role.PATIENT),
-    AppointmentController.payAppointment
+router.post(
+	"/pay-appointment",
+	auth(Role.PATIENT),
+	AppointmentController.payAppointment,
 );
 
-router.get("/book-appointment/payment/callback",
-    AppointmentController.bookAppointmentCallback
+router.get(
+	"/book-appointment/payment/callback",
+	AppointmentController.bookAppointmentCallback,
 );
 
-router.post("/cancel-appointment",
-    auth(Role.PATIENT, Role.ADMIN, Role.SUPER_ADMIN),
-    AppointmentController.cancelAppointment
+router.post(
+	"/cancel-appointment",
+	auth(Role.PATIENT, Role.ADMIN, Role.SUPER_ADMIN),
+	AppointmentController.cancelAppointment,
 );
 
 export const AppointmentRoutes = router;
