@@ -3,14 +3,21 @@ import crypto from "crypto";
 import ejs from "ejs";
 import path from "path";
 import { UploadApiResponse } from "cloudinary";
-import { Role } from "../../../generated/prisma/enums";
+import {
+	DoctorVerificationStatus,
+	Role,
+} from "../../../generated/prisma/enums";
 import config from "../../config";
 import { cloudinary } from "../../lib/cloudinary";
 import { transporter } from "../../lib/nodemailer";
 import { prisma } from "../../lib/prisma";
 import { redisClient } from "../../lib/redis";
 import { IApplyAsDoctor } from "./doctor.interface";
-import { IVerifyDoctorEmailPayload } from "./doctor.validation";
+import {
+	IApproveDoctorPayload,
+	IVerifyDoctorEmailPayload,
+} from "./doctor.validation";
+import { RequestUser } from "../../middleware/checkAuth";
 
 const applyAsDoctor = async (
 	payload: IApplyAsDoctor,
@@ -184,7 +191,89 @@ const verifyDoctorEmail = async (payload: IVerifyDoctorEmailPayload) => {
 	return verifiedUser;
 };
 
+const approveDoctor = async (
+	payload: IApproveDoctorPayload,
+	reviewer: RequestUser,
+) => {
+	const { doctorId, verificationStatus, rejectionReason } = payload;
+
+	const existingDoctor = await prisma.doctor.findUnique({
+		where: {
+			id: doctorId,
+		},
+		include: {
+			user: true,
+		},
+	});
+
+	if (!existingDoctor) {
+		throw new Error("Doctor application not found");
+	}
+
+	if (existingDoctor.isDeleted) {
+		throw new Error("Doctor application has been deleted.");
+	}
+
+	if (!existingDoctor.user.emailVerified) {
+		throw new Error(
+			"Doctor's email is not verified. Cannot review the application.",
+		);
+	}
+
+	if (existingDoctor.verificationStatus !== DoctorVerificationStatus.PENDING) {
+		throw new Error(
+			`Doctor application is already ${verificationStatus.toLowerCase()}.`,
+		);
+	}
+
+	const updatedDoctor = await prisma.doctor.update({
+		where: {
+			id: doctorId,
+		},
+		data: {
+			verificationStatus,
+			rejectionReason:
+				verificationStatus === DoctorVerificationStatus.REJECTED
+					? rejectionReason
+					: null,
+			reviewedBy: reviewer.userId,
+			reviewedAt: new Date(),
+		},
+	});
+
+	const isApproved = verificationStatus === DoctorVerificationStatus.VERIFIED;
+
+	const templatePath = path.join(
+		process.cwd(),
+		`src/app/templates/${
+			isApproved
+				? "doctor-application-approved.ejs"
+				: "doctor-application-rejected.ejs"
+		}`,
+	);
+
+	const templateData = {
+		name: updatedDoctor.name,
+		email: updatedDoctor.email,
+		reason: updatedDoctor.rejectionReason,
+	};
+
+	const html = await ejs.renderFile(templatePath, templateData);
+
+	await transporter.sendMail({
+		from: config.email_sender,
+		to: existingDoctor.user.email,
+		subject: isApproved
+			? "Your Doctor Application Has Been Approved - PH Healthcare Management System"
+			: "Your Doctor Application Has Been Rejected - PH Healthcare Management System",
+		html,
+	});
+
+	return updatedDoctor;
+};
+
 export const DoctorServices = {
 	applyAsDoctor,
 	verifyDoctorEmail,
+	approveDoctor,
 };
