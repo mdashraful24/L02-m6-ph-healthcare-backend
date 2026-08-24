@@ -73,4 +73,10 @@ export const ApplyAsDoctorSchema = z.object({
 	}),
 });
 
+export const VerifyDoctorEmailSchema = z.object({
+	email: z.string().email("Not a valid email address"),
+	otp: z.string().length(6, { message: "OTP must be 6 digits long" }),
+});
+
 export type IApplyAsDoctorPayload = z.infer<typeof ApplyAsDoctorSchema>;
+export type IVerifyDoctorEmailPayload = z.infer<typeof VerifyDoctorEmailSchema>;
