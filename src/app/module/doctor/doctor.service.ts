@@ -1,12 +1,17 @@
+import path from "path";
+import ejs from "ejs";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import ejs from "ejs";
-import path from "path";
+import httpStatus  from 'http-status';
 import { UploadApiResponse } from "cloudinary";
 import {
 	DoctorVerificationStatus,
 	Role,
 } from "../../../generated/prisma/enums";
+import { DoctorWhereInput } from "../../../generated/prisma/models";
+import { RequestUser } from "../../middleware/checkAuth";
+import { AppError } from "../../utils/AppError";
+import { IQuery } from "../../interfaces";
 import config from "../../config";
 import { cloudinary } from "../../lib/cloudinary";
 import { transporter } from "../../lib/nodemailer";
@@ -17,9 +22,6 @@ import {
 	IApproveDoctorPayload,
 	IVerifyDoctorEmailPayload,
 } from "./doctor.validation";
-import { RequestUser } from "../../middleware/checkAuth";
-import { IQuery } from "../../interfaces";
-import { DoctorWhereInput } from "../../../generated/prisma/models";
 
 const applyAsDoctor = async (
 	payload: IApplyAsDoctor,
@@ -33,7 +35,7 @@ const applyAsDoctor = async (
 	});
 
 	if (isUserExist) {
-		throw new Error("User with this email already exists.");
+		throw new AppError(httpStatus.CONFLICT, "User with this email already exists.");
 	}
 
 	const resumeUploadResult = await new Promise<UploadApiResponse>(
@@ -45,7 +47,7 @@ const applyAsDoctor = async (
 					}
 
 					if (!result) {
-						return reject(new Error("No result returned from Cloudinary"));
+						return reject(new AppError(httpStatus.BAD_REQUEST, "No result returned from Cloudinary"));
 					}
 
 					resolve(result);
@@ -64,7 +66,7 @@ const applyAsDoctor = async (
 						}
 
 						if (!result) {
-							return reject(new Error("No result returned from Cloudinary"));
+							return reject(new AppError(httpStatus.BAD_REQUEST, "No result returned from Cloudinary"));
 						}
 
 						resolve(result);
@@ -155,22 +157,22 @@ const verifyDoctorEmail = async (payload: IVerifyDoctorEmailPayload) => {
 	});
 
 	if (!existingUser) {
-		throw new Error("Doctor with this email does not exist.");
+		throw new AppError(httpStatus.NOT_FOUND, "Doctor with this email does not exist.");
 	}
 
 	if (existingUser.emailVerified) {
-		throw new Error("Email is already verified.");
+		throw new AppError(httpStatus.BAD_REQUEST, "Email is already verified.");
 	}
 
 	const otpKey = `doctor-application-otp:${email}`;
 	const redisOtp = await redisClient.get(otpKey);
 
 	if (!redisOtp) {
-		throw new Error("OTP has expired. Please request a new one.");
+		throw new AppError(httpStatus.BAD_REQUEST, "OTP has expired. Please request a new one.");
 	}
 
 	if (redisOtp !== otp) {
-		throw new Error("Invalid OTP. Please try again.");
+		throw new AppError(httpStatus.BAD_REQUEST, "Invalid OTP. Please try again.");
 	}
 
 	await redisClient.del(otpKey);
@@ -209,23 +211,19 @@ const approveDoctor = async (
 	});
 
 	if (!existingDoctor) {
-		throw new Error("Doctor application not found");
+		throw new AppError(httpStatus.NOT_FOUND, "Doctor application not found");
 	}
 
 	if (existingDoctor.isDeleted) {
-		throw new Error("Doctor application has been deleted.");
+		throw new AppError(httpStatus.BAD_REQUEST, "Doctor application has been deleted.");
 	}
 
 	if (!existingDoctor.user.emailVerified) {
-		throw new Error(
-			"Doctor's email is not verified. Cannot review the application.",
-		);
+		throw new AppError(httpStatus.BAD_REQUEST, "Doctor's email is not verified. Cannot review the application.");
 	}
 
 	if (existingDoctor.verificationStatus !== DoctorVerificationStatus.PENDING) {
-		throw new Error(
-			`Doctor application is already ${verificationStatus.toLowerCase()}.`,
-		);
+		throw new AppError(httpStatus.BAD_REQUEST, `Doctor application is already ${verificationStatus.toLowerCase()}.`);
 	}
 
 	const updatedDoctor = await prisma.doctor.update({
