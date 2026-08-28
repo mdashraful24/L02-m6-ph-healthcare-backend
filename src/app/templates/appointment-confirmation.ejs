@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Confirmation - PH Healthcare</title>
+</head>
+
+<body style="
+    margin:0;
+    padding:10px;
+    background:#eff6ff;
+    font-family:Arial, Helvetica, sans-serif;
+    color:#1e293b;
+">
+
+    <div style="
+        max-width:620px;
+        margin:40px auto;
+        padding:0 15px;
+    ">
+
+        <!-- Main Card -->
+        <div style="
+            background:#ffffff;
+            border-radius:16px;
+            overflow:hidden;
+            box-shadow:0 8px 30px rgba(15, 23, 42, 0.08);
+        ">
+
+            <!-- Header -->
+            <div style="
+                background:#2563eb;
+                padding:35px 30px;
+                text-align:center;
+            ">
+
+                <div style="
+                    width:56px;
+                    height:56px;
+                    margin:0 auto 12px;
+                    background:#ffffff;
+                    border-radius:14px;
+                    line-height:56px;
+                    font-size:28px;
+                ">
+                    🩺
+                </div>
+
+                <h1 style="
+                    margin:0;
+                    color:#ffffff;
+                    font-size:26px;
+                    font-weight:700;
+                ">
+                    PH Healthcare
+                </h1>
+
+                <p style="
+                    margin:8px 0 0;
+                    color:#dbeafe;
+                    font-size:14px;
+                ">
+                    Healthcare Management System
+                </p>
+
+            </div>
+
+
+            <!-- Content -->
+            <div style="
+                padding:40px 35px;
+                text-align:center;
+            ">
+
+                <!-- Success Icon -->
+                <div style="
+                    width:64px;
+                    height:64px;
+                    margin:0 auto 20px;
+                    background:#dcfce7;
+                    border-radius:50%;
+                    text-align:center;
+                    line-height:64px;
+                    color:#16a34a;
+                    font-size:30px;
+                    font-weight:bold;
+                ">
+                    ✓
+                </div>
+
+
+                <!-- Heading -->
+                <h2 style="
+                    margin:0 0 12px;
+                    color:#0f172a;
+                    font-size:24px;
+                    line-height:1.3;
+                ">
+                    Appointment Confirmed!
+                </h2>
+
+
+                <!-- Greeting -->
+                <p style="
+                    margin:0 0 10px;
+                    color:#334155;
+                    font-size:15px;
+                    line-height:1.6;
+                ">
+                    Hi <strong><%= name %></strong>,
+                </p>
+
+
+                <!-- Description -->
+                <p style="
+                    max-width:480px;
+                    margin:0 auto;
+                    color:#64748b;
+                    font-size:15px;
+                    line-height:1.7;
+                ">
+                    Your appointment has been successfully confirmed
+                    and your payment has been received.
+                </p>
+
+
+                <!-- Appointment Card -->
+                <div style="
+                    margin:30px 0 0;
+                    padding:22px 20px;
+                    background:#f8fafc;
+                    border:1px solid #e2e8f0;
+                    border-radius:12px;
+                    text-align:left;
+                ">
+
+                    <h3 style="
+                        margin:0 0 18px;
+                        color:#1d4ed8;
+                        font-size:16px;
+                    ">
+                        Appointment Details
+                    </h3>
+
+
+                    <!-- Doctor -->
+                    <p style="
+                        margin:0 0 12px;
+                        color:#475569;
+                        font-size:14px;
+                        line-height:1.6;
+                    ">
+                        <strong style="color:#0f172a;">
+                            Doctor:
+                        </strong>
+                        <%= doctorName %>
+                    </p>
+
+
+                    <!-- Specialization -->
+                    <p style="
+                        margin:0 0 12px;
+                        color:#475569;
+                        font-size:14px;
+                        line-height:1.6;
+                    ">
+                        <strong style="color:#0f172a;">
+                            Specialization:
+                        </strong>
+                        <%= specialization %>
+                    </p>
+
+
+                    <!-- Date -->
+                    <p style="
+                        margin:0 0 12px;
+                        color:#475569;
+                        font-size:14px;
+                        line-height:1.6;
+                    ">
+                        <strong style="color:#0f172a;">
+                            Date:
+                        </strong>
+                        <%= appointmentDate %>
+                    </p>
+
+
+                    <!-- Schedule -->
+                    <p style="
+                        margin:0 0 12px;
+                        color:#475569;
+                        font-size:14px;
+                        line-height:1.6;
+                    ">
+                        <strong style="color:#0f172a;">
+                            Schedule:
+                        </strong>
+                        <%= scheduleTime %>
+                    </p>
+
+
+                    <!-- Joining Time -->
+                    <p style="
+                        margin:0 0 12px;
+                        color:#475569;
+                        font-size:14px;
+                        line-height:1.6;
+                    ">
+                        <strong style="color:#0f172a;">
+                            Joining Time:
+                        </strong>
+                        <%= joiningTime %>
+                    </p>
+
+
+                    <!-- Serial Number -->
+                    <p style="
+                        margin:0 0 12px;
+                        color:#475569;
+                        font-size:14px;
+                        line-height:1.6;
+                    ">
+                        <strong style="color:#0f172a;">
+                            Serial Number:
+                        </strong>
+
+                        <span style="
+                            display:inline-block;
+                            margin-left:5px;
+                            padding:4px 10px;
+                            background:#dbeafe;
+                            color:#1d4ed8;
+                            border-radius:6px;
+                            font-weight:700;
+                        ">
+                            #<%= serialNumber %>
+                        </span>
+                    </p>
+
+                </div>
+
+
+                <!-- Meeting Button -->
+                <div style="
+                    margin:28px 0 0;
+                ">
+
+                    <a
+                        href="<%= meetingLink %>"
+                        style="
+                            display:inline-block;
+                            padding:13px 28px;
+                            background:#2563eb;
+                            color:#ffffff;
+                            text-decoration:none;
+                            border-radius:8px;
+                            font-size:14px;
+                            font-weight:700;
+                        "
+                    >
+                        Join Appointment
+                    </a>
+
+                </div>
+
+
+                <!-- Payment Message -->
+                <div style="
+                    margin:25px 0 0;
+                    padding:18px 20px;
+                    background:#f0fdf4;
+                    border:1px solid #bbf7d0;
+                    border-radius:10px;
+                    text-align:left;
+                ">
+
+                    <p style="
+                        margin:0;
+                        color:#475569;
+                        font-size:13px;
+                        line-height:1.7;
+                    ">
+                        <strong style="color:#15803d;">
+                            Payment Successful.
+                        </strong>
+                        Your bKash payment has been successfully received.
+                        Your invoice is attached to this email for your records.
+                    </p>
+
+                </div>
+
+
+                <!-- Reminder -->
+                <div style="
+                    margin:15px 0 0;
+                    padding:18px 20px;
+                    background:#eff6ff;
+                    border:1px solid #bfdbfe;
+                    border-radius:10px;
+                    text-align:left;
+                ">
+
+                    <p style="
+                        margin:0;
+                        color:#475569;
+                        font-size:13px;
+                        line-height:1.7;
+                    ">
+                        <strong style="color:#1d4ed8;">
+                            Please be on time.
+                        </strong>
+                        Please join your appointment at the assigned
+                        joining time and keep your serial number ready.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Footer -->
+            <div style="
+                padding:24px 30px;
+                background:#f8fafc;
+                border-top:1px solid #e2e8f0;
+                text-align:center;
+            ">
+
+                <p style="
+                    margin:0 0 7px;
+                    color:#334155;
+                    font-size:13px;
+                    font-weight:600;
+                ">
+                    PH Healthcare Management System
+                </p>
+
+                <p style="
+                    margin:0;
+                    color:#94a3b8;
+                    font-size:12px;
+                    line-height:1.5;
+                ">
+                    This is an automated email. Please do not reply.
+                </p>
+
+                <p style="
+                    margin:10px 0 0;
+                    color:#94a3b8;
+                    font-size:11px;
+                ">
+                    &copy; <%= new Date().getFullYear() %> PH Healthcare.
+                    All rights reserved.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
