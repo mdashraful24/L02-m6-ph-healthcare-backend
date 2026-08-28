@@ -17,7 +17,10 @@ const applyAsDoctor = catchAsync(async (req: Request, res: Response) => {
 	);
 
 	if (!zodValidationResult.success) {
-		throw new AppError(httpStatus.BAD_REQUEST, zodValidationResult.error.issues[0].message);
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			zodValidationResult.error.issues[0].message,
+		);
 	}
 
 	const payload = zodValidationResult.data;
@@ -73,7 +76,7 @@ const getAllDoctors = catchAsync(async (req: Request, res: Response) => {
 		success: true,
 		message: "All doctors retrieved successfully!",
 		data: result.data,
-		meta: result.meta
+		meta: result.meta,
 	});
 });
 

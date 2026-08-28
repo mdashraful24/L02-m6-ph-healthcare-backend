@@ -86,7 +86,10 @@ const getMe = catchAsync(async (req: Request, res: Response) => {
 	const user = req.user as unknown as IRequestUser;
 
 	if (!user) {
-		throw new AppError(httpStatus.BAD_REQUEST, "User information is missing in the request");
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			"User information is missing in the request",
+		);
 	}
 
 	const result = await AuthService.getMe(user);

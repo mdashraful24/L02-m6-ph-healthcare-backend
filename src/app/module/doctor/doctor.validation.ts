@@ -79,24 +79,26 @@ export const VerifyDoctorEmailSchema = z.object({
 	otp: z.string().length(6, { message: "OTP must be 6 digits long" }),
 });
 
-export const ApproveDoctorSchema = z.object({
-	doctorId: z.string().uuid("Doctor ID must be a valid"),
-	verificationStatus: z.enum(
-		[DoctorVerificationStatus.VERIFIED, DoctorVerificationStatus.REJECTED],
+export const ApproveDoctorSchema = z
+	.object({
+		doctorId: z.string().uuid("Doctor ID must be a valid"),
+		verificationStatus: z.enum(
+			[DoctorVerificationStatus.VERIFIED, DoctorVerificationStatus.REJECTED],
+			{
+				error: "Approval status must be either VERIFIED or REJECTED",
+			},
+		),
+		rejectionReason: z.string().optional(),
+	})
+	.refine(
+		(data) =>
+			data.verificationStatus === "VERIFIED" ||
+			Boolean(data.rejectionReason?.trim()),
 		{
-			error: "Approval status must be either VERIFIED or REJECTED",
+			message: "Rejection reason is required when rejecting a doctor",
+			path: ["rejectionReason"],
 		},
-	),
-	rejectionReason: z.string().optional(),
-}).refine(
-	(data) =>
-		data.verificationStatus === "VERIFIED" ||
-		Boolean(data.rejectionReason?.trim()),
-	{
-		message: "Rejection reason is required when rejecting a doctor",
-		path: ["rejectionReason"],
-	},
-);
+	);
 
 // Type definitions for the validation schemas
 export type IApplyAsDoctorPayload = z.infer<typeof ApplyAsDoctorSchema>;

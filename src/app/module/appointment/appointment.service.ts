@@ -266,11 +266,17 @@ const cancelAppointment = async (payload: any) => {
 			existingAppointment.status === AppointmentStatus.ONGOING ||
 			existingAppointment.status === AppointmentStatus.COMPLETED
 		) {
-			throw new AppError(httpStatus.BAD_REQUEST, "Appointment is ongoing or completed");
+			throw new AppError(
+				httpStatus.BAD_REQUEST,
+				"Appointment is ongoing or completed",
+			);
 		}
 
 		if (existingAppointment.status === AppointmentStatus.CANCELLED) {
-			throw new AppError(httpStatus.BAD_REQUEST, "Appointment already cancelled");
+			throw new AppError(
+				httpStatus.BAD_REQUEST,
+				"Appointment already cancelled",
+			);
 		}
 
 		const updatedAppointment = await tx.appointment.update({

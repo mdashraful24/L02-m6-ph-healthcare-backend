@@ -1,4 +1,4 @@
-import { Doctor, Prisma } from "../../../generated/prisma/client";
+import type { Doctor, Prisma } from "../../../generated/prisma/client";
 import { AuthProvider } from "../../../generated/prisma/enums";
 
 export interface IAdditionalDocument {

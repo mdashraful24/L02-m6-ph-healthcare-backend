@@ -1,4 +1,4 @@
-import httpStatus from 'http-status';
+import httpStatus from "http-status";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import ejs from "ejs";
@@ -37,7 +37,10 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
 	});
 
 	if (isUserExists) {
-		throw new AppError(httpStatus.CONFLICT, "User with this email already exists");
+		throw new AppError(
+			httpStatus.CONFLICT,
+			"User with this email already exists",
+		);
 	}
 
 	const hashedPassword = await bcrypt.hash(
@@ -140,7 +143,10 @@ const verifyPatientEmail = async (payload: IVerifyEmailPayload) => {
 	const redisPatientData = await redisClient.get(patientRegistrationKey);
 
 	if (!redisPatientData) {
-		throw new AppError(httpStatus.BAD_REQUEST, "Patient registration data is missing");
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			"Patient registration data is missing",
+		);
 	}
 
 	const patientPayload: IRegisterPatientPayload = JSON.parse(redisPatientData);
@@ -357,11 +363,17 @@ const googleLogin = async (payload: IGoogleLoginPayload) => {
 		googleIdTokenPayload = ticket.getPayload();
 	} catch (error) {
 		console.log("Google ID Token Verification Failed:", error);
-		throw new AppError(httpStatus.UNAUTHORIZED, "Invalid or expired Google ID token");
+		throw new AppError(
+			httpStatus.UNAUTHORIZED,
+			"Invalid or expired Google ID token",
+		);
 	}
 
 	if (!googleIdTokenPayload) {
-		throw new AppError(httpStatus.UNAUTHORIZED, "Invalid or expired Google ID token");
+		throw new AppError(
+			httpStatus.UNAUTHORIZED,
+			"Invalid or expired Google ID token",
+		);
 	}
 
 	if (!googleIdTokenPayload.email) {
@@ -369,7 +381,10 @@ const googleLogin = async (payload: IGoogleLoginPayload) => {
 	}
 
 	if (!googleIdTokenPayload.name) {
-		throw new AppError(httpStatus.BAD_REQUEST, "Google Email User Name not found");
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			"Google Email User Name not found",
+		);
 	}
 
 	const ifPatientExistsWithGoogleAuth = await prisma.user.findUnique({
@@ -393,7 +408,10 @@ const googleLogin = async (payload: IGoogleLoginPayload) => {
 
 		if (ifPatientExistsWithCredentials) {
 			if (!ifPatientExistsWithCredentials.emailVerified) {
-				throw new AppError(httpStatus.BAD_REQUEST, "User email is not verified");
+				throw new AppError(
+					httpStatus.BAD_REQUEST,
+					"User email is not verified",
+				);
 			}
 
 			if (ifPatientExistsWithCredentials.status === UserStatus.BLOCKED) {
@@ -526,7 +544,10 @@ const forgotPassword = async (payload: IForgotPasswordPayload) => {
 	}
 
 	if (!isUserExists.emailVerified) {
-		throw new AppError(httpStatus.BAD_REQUEST, "Your email is not verified. Please verify your email.");
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			"Your email is not verified. Please verify your email.",
+		);
 	}
 
 	if (isUserExists.isDeleted || isUserExists.status === UserStatus.DELETED) {
@@ -594,7 +615,10 @@ const resetPassword = async (payload: IResetPasswordPayload) => {
 	}
 
 	if (!isUserExists.emailVerified) {
-		throw new AppError(httpStatus.BAD_REQUEST, "Your email is not verified. Please verify your email.");
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			"Your email is not verified. Please verify your email.",
+		);
 	}
 
 	if (isUserExists.isDeleted || isUserExists.status === UserStatus.DELETED) {

@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import httpStatus from 'http-status';
+import httpStatus from "http-status";
 import { Role } from "../../generated/prisma/enums";
 import config from "../config";
 import { prisma } from "../lib/prisma";

@@ -2,23 +2,23 @@ import path from "path";
 import ejs from "ejs";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import httpStatus  from 'http-status';
-import { UploadApiResponse } from "cloudinary";
+import httpStatus from "http-status";
+import type { UploadApiResponse } from "cloudinary";
 import {
 	DoctorVerificationStatus,
 	Role,
 } from "../../../generated/prisma/enums";
-import { DoctorWhereInput } from "../../../generated/prisma/models";
-import { RequestUser } from "../../middleware/checkAuth";
+import type { DoctorWhereInput } from "../../../generated/prisma/models";
+import type { RequestUser } from "../../middleware/checkAuth";
 import { AppError } from "../../utils/AppError";
-import { IQuery } from "../../interfaces";
+import type { IQuery } from "../../interfaces";
 import config from "../../config";
 import { cloudinary } from "../../lib/cloudinary";
 import { transporter } from "../../lib/nodemailer";
 import { prisma } from "../../lib/prisma";
 import { redisClient } from "../../lib/redis";
-import { IApplyAsDoctor } from "./doctor.interface";
-import {
+import type { IApplyAsDoctor } from "./doctor.interface";
+import type {
 	IApproveDoctorPayload,
 	IVerifyDoctorEmailPayload,
 } from "./doctor.validation";
@@ -35,7 +35,10 @@ const applyAsDoctor = async (
 	});
 
 	if (isUserExist) {
-		throw new AppError(httpStatus.CONFLICT, "User with this email already exists.");
+		throw new AppError(
+			httpStatus.CONFLICT,
+			"User with this email already exists.",
+		);
 	}
 
 	const resumeUploadResult = await new Promise<UploadApiResponse>(
@@ -47,7 +50,12 @@ const applyAsDoctor = async (
 					}
 
 					if (!result) {
-						return reject(new AppError(httpStatus.BAD_REQUEST, "No result returned from Cloudinary"));
+						return reject(
+							new AppError(
+								httpStatus.BAD_REQUEST,
+								"No result returned from Cloudinary",
+							),
+						);
 					}
 
 					resolve(result);
@@ -66,7 +74,12 @@ const applyAsDoctor = async (
 						}
 
 						if (!result) {
-							return reject(new AppError(httpStatus.BAD_REQUEST, "No result returned from Cloudinary"));
+							return reject(
+								new AppError(
+									httpStatus.BAD_REQUEST,
+									"No result returned from Cloudinary",
+								),
+							);
 						}
 
 						resolve(result);
@@ -157,7 +170,10 @@ const verifyDoctorEmail = async (payload: IVerifyDoctorEmailPayload) => {
 	});
 
 	if (!existingUser) {
-		throw new AppError(httpStatus.NOT_FOUND, "Doctor with this email does not exist.");
+		throw new AppError(
+			httpStatus.NOT_FOUND,
+			"Doctor with this email does not exist.",
+		);
 	}
 
 	if (existingUser.emailVerified) {
@@ -168,11 +184,17 @@ const verifyDoctorEmail = async (payload: IVerifyDoctorEmailPayload) => {
 	const redisOtp = await redisClient.get(otpKey);
 
 	if (!redisOtp) {
-		throw new AppError(httpStatus.BAD_REQUEST, "OTP has expired. Please request a new one.");
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			"OTP has expired. Please request a new one.",
+		);
 	}
 
 	if (redisOtp !== otp) {
-		throw new AppError(httpStatus.BAD_REQUEST, "Invalid OTP. Please try again.");
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			"Invalid OTP. Please try again.",
+		);
 	}
 
 	await redisClient.del(otpKey);
@@ -215,15 +237,24 @@ const approveDoctor = async (
 	}
 
 	if (existingDoctor.isDeleted) {
-		throw new AppError(httpStatus.BAD_REQUEST, "Doctor application has been deleted.");
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			"Doctor application has been deleted.",
+		);
 	}
 
 	if (!existingDoctor.user.emailVerified) {
-		throw new AppError(httpStatus.BAD_REQUEST, "Doctor's email is not verified. Cannot review the application.");
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			"Doctor's email is not verified. Cannot review the application.",
+		);
 	}
 
 	if (existingDoctor.verificationStatus !== DoctorVerificationStatus.PENDING) {
-		throw new AppError(httpStatus.BAD_REQUEST, `Doctor application is already ${verificationStatus.toLowerCase()}.`);
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			`Doctor application is already ${verificationStatus.toLowerCase()}.`,
+		);
 	}
 
 	const updatedDoctor = await prisma.doctor.update({
@@ -245,9 +276,10 @@ const approveDoctor = async (
 
 	const templatePath = path.join(
 		process.cwd(),
-		`src/app/templates/${isApproved
-			? "doctor-application-approved.ejs"
-			: "doctor-application-rejected.ejs"
+		`src/app/templates/${
+			isApproved
+				? "doctor-application-approved.ejs"
+				: "doctor-application-rejected.ejs"
 		}`,
 	);
 
@@ -287,61 +319,60 @@ const getAllDoctors = async (query: IQuery) => {
 				{
 					name: {
 						contains: query.searchTerm,
-						mode: "insensitive"
-					}
-
+						mode: "insensitive",
+					},
 				},
 				{
 					email: {
 						contains: query.searchTerm,
-						mode: "insensitive"
-					}
+						mode: "insensitive",
+					},
 				},
 				{
 					specialization: {
 						contains: query.searchTerm,
-						mode: "insensitive"
-					}
+						mode: "insensitive",
+					},
 				},
 				{
 					licenseNumber: {
 						contains: query.searchTerm,
-						mode: "insensitive"
-					}
-				}
-			]
-		})
+						mode: "insensitive",
+					},
+				},
+			],
+		});
 	}
 
 	// Add any other filter conditions based on the query parameters
 	if (query.specialization) {
 		andConditions.push({
-			specialization: { equals: query.specialization, mode: "insensitive" }
+			specialization: { equals: query.specialization, mode: "insensitive" },
 		});
 	}
 
 	if (query.email) {
 		andConditions.push({
-			email: { equals: query.email, mode: "insensitive" }
+			email: { equals: query.email, mode: "insensitive" },
 		});
 	}
 
 	if (query.licenseNumber) {
 		andConditions.push({
-			licenseNumber: { equals: query.licenseNumber, mode: "insensitive" }
+			licenseNumber: { equals: query.licenseNumber, mode: "insensitive" },
 		});
 	}
 
 	if (query.verificationStatus) {
 		andConditions.push({
-			verificationStatus: query.verificationStatus as DoctorVerificationStatus
+			verificationStatus: query.verificationStatus as DoctorVerificationStatus,
 		});
 	}
 
 	andConditions.push({ isDeleted: false });
 
 	const whereCondition: DoctorWhereInput = {
-		AND: andConditions
+		AND: andConditions,
 	};
 
 	const allDoctors = await prisma.doctor.findMany({
@@ -353,7 +384,7 @@ const getAllDoctors = async (query: IQuery) => {
 
 		orderBy: {
 			// sortBy : sortOrder
-			[sortBy]: sortOrder
+			[sortBy]: sortOrder,
 		},
 
 		include: {
@@ -370,9 +401,9 @@ const getAllDoctors = async (query: IQuery) => {
 
 	const totalDoctorCount = await prisma.doctor.count({
 		where: {
-			AND: andConditions
-		}
-	})
+			AND: andConditions,
+		},
+	});
 
 	return {
 		data: allDoctors,
@@ -380,9 +411,9 @@ const getAllDoctors = async (query: IQuery) => {
 			page: page,
 			limit: limit,
 			total: totalDoctorCount,
-			totalPages: Math.ceil(totalDoctorCount / limit)
-		}
-	}
+			totalPages: Math.ceil(totalDoctorCount / limit),
+		},
+	};
 };
 
 export const DoctorServices = {
