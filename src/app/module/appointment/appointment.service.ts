@@ -463,7 +463,7 @@ const bookAppointmentCallback = async (query: Record<string, any>) => {
 				.fontSize(22)
 				.font("Helvetica-Bold")
 				.fillColor(primaryColor)
-				.text("PH Healthcare", {
+				.text("🩺 PH HEALTHCARE", {
 					align: "center",
 				});
 
@@ -771,6 +771,7 @@ const bookAppointmentCallback = async (query: Record<string, any>) => {
 
 			const pdfBuffer = await pdfReadyPromise;
 
+			// Send Appointment Confirmation Email with PDF Attachment
 			const templatePath = path.join(
 				process.cwd(),
 				"src/app/templates/appointment-confirmation.ejs",
