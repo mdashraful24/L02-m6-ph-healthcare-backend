@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+import type { ParamsDictionary } from "express-serve-static-core";
 import httpStatus from "http-status";
 import type z from "zod";
 import { AppError } from "../utils/AppError";
@@ -21,6 +22,28 @@ export const validateRequest = (zodSchema: z.ZodObject) => {
 		}
 
 		req.body = result.data;
+
+		next();
+	});
+};
+
+export const validateRequestParams = (zodSchema: z.ZodObject) => {
+	return catchAsync((req: Request, res: Response, next: NextFunction) => {
+		const payload = req.params ?? {};
+
+		const result = zodSchema.safeParse(payload);
+
+		if (!result.success) {
+			console.log(result.error);
+			console.log(result.error.issues);
+
+			throw new AppError(
+				httpStatus.BAD_REQUEST,
+				result.error.issues[0].message,
+			);
+		}
+
+		req.params = result.data as unknown as ParamsDictionary;
 
 		next();
 	});

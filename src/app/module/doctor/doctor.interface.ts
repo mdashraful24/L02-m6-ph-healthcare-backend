@@ -19,3 +19,11 @@ export interface IApplyAsDoctor {
 
 	doctor: Omit<Prisma.DoctorCreateWithoutUserInput, "name" | "email">;
 }
+
+export interface IUpdateDoctorProfile {
+	address?: string;
+	bio?: string;
+	consultationFee?: number;
+	contactNumber?: string;
+	imageUrl?: string;
+}

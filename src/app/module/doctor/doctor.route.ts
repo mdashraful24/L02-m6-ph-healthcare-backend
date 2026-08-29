@@ -2,7 +2,10 @@ import { Router } from "express";
 import { Role } from "../../../generated/prisma/enums";
 import { upload } from "../../lib/multer";
 import { auth } from "../../middleware/checkAuth";
-import { validateRequest } from "../../middleware/validateRequest";
+import {
+	validateRequest,
+	validateRequestParams,
+} from "../../middleware/validateRequest";
 import { DoctorController } from "./doctor.controller";
 import { doctorValidationSchemas } from "./doctor.validation";
 
@@ -34,6 +37,26 @@ router.get(
 	"/all-doctors",
 	auth(Role.ADMIN, Role.SUPER_ADMIN),
 	DoctorController.getAllDoctors,
+);
+
+router.get("/all-doctors-public", DoctorController.getAllDoctorsListPublic);
+
+router.get(
+	"/available-doctors-today",
+	DoctorController.getAvailableDoctorByTodaysSchedule,
+);
+
+router.get(
+	"/public/:doctorId",
+	validateRequestParams(doctorValidationSchemas.DoctorIdParamSchema),
+	DoctorController.getSingleDoctorPublicProfile,
+);
+
+router.put(
+	"/update-my-profile",
+	auth(Role.DOCTOR),
+	validateRequest(doctorValidationSchemas.UpdateDoctorProfileSchema),
+	DoctorController.updateDoctorProfile,
 );
 
 export const DoctorRoutes = router;

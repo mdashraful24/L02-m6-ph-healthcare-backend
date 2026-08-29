@@ -100,14 +100,56 @@ export const ApproveDoctorSchema = z
 		},
 	);
 
+export const UpdateDoctorProfileSchema = z.object({
+	address: z
+		.string()
+		.trim()
+		.max(255, "Address must not exceed 255 characters")
+		.optional(),
+
+	bio: z
+		.string()
+		.trim()
+		.max(2000, "Bio must not exceed 2000 characters")
+		.optional(),
+
+	consultationFee: z.coerce
+		.number()
+		.nonnegative("Consultation fee cannot be negative")
+		.max(99999999.99, "Consultation fee is too large")
+		.optional(),
+
+	contactNumber: z
+		.string()
+		.trim()
+		.min(7, "Contact number is too short")
+		.max(20, "Contact number is too long")
+		.optional(),
+
+	imageUrl: z
+		.string()
+		.trim()
+		.url("Please provide a valid image URL")
+		.or(z.literal(""))
+		.optional(),
+});
+
+export const DoctorIdParamSchema = z.object({
+	doctorId: z.string().uuid("Doctor ID must be a valid UUID"),
+});
+
 // Type definitions for the validation schemas
 export type IApplyAsDoctorPayload = z.infer<typeof ApplyAsDoctorSchema>;
 export type IVerifyDoctorEmailPayload = z.infer<typeof VerifyDoctorEmailSchema>;
 export type IApproveDoctorPayload = z.infer<typeof ApproveDoctorSchema>;
+export type IUpdateDoctorProfilePayload = z.infer<typeof UpdateDoctorProfileSchema>;
+export type IDoctorIdParamPayload = z.infer<typeof DoctorIdParamSchema>;
 
 // Exporting the validation schemas for use in other parts of the application
 export const doctorValidationSchemas = {
 	ApplyAsDoctorSchema,
 	VerifyDoctorEmailSchema,
 	ApproveDoctorSchema,
+	UpdateDoctorProfileSchema,
+	DoctorIdParamSchema,
 };
