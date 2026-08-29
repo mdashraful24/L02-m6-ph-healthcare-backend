@@ -134,16 +134,13 @@ export const UpdateDoctorProfileSchema = z.object({
 		.optional(),
 });
 
-export const DoctorIdParamSchema = z.object({
-	doctorId: z.string().uuid("Doctor ID must be a valid UUID"),
-});
-
 // Type definitions for the validation schemas
 export type IApplyAsDoctorPayload = z.infer<typeof ApplyAsDoctorSchema>;
 export type IVerifyDoctorEmailPayload = z.infer<typeof VerifyDoctorEmailSchema>;
 export type IApproveDoctorPayload = z.infer<typeof ApproveDoctorSchema>;
-export type IUpdateDoctorProfilePayload = z.infer<typeof UpdateDoctorProfileSchema>;
-export type IDoctorIdParamPayload = z.infer<typeof DoctorIdParamSchema>;
+export type IUpdateDoctorProfilePayload = z.infer<
+	typeof UpdateDoctorProfileSchema
+>;
 
 // Exporting the validation schemas for use in other parts of the application
 export const doctorValidationSchemas = {
@@ -151,5 +148,4 @@ export const doctorValidationSchemas = {
 	VerifyDoctorEmailSchema,
 	ApproveDoctorSchema,
 	UpdateDoctorProfileSchema,
-	DoctorIdParamSchema,
 };

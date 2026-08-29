@@ -99,20 +99,24 @@ const getMyAppointments = catchAsync(async (req: Request, res: Response) => {
 	});
 });
 
-const getMyDoctorAppointments = catchAsync(async (req: Request, res: Response) => {
-	const user = req.user!;
-	const query = req.query;
+const getMyDoctorAppointments = catchAsync(
+	async (req: Request, res: Response) => {
+		const user = req.user!;
+		const query = req.query;
 
-	const result = await AppointmentServices.getMyDoctorAppointments(query, user);
+		const result = await AppointmentServices.getMyDoctorAppointments(
+			query,
+			user,
+		);
 
-	sendResponse(res, {
-		statusCode: httpStatus.OK,
-		success: true,
-		message: "My doctor appointments retrieved successfully",
-		data: result.data,
-		meta: result.meta,
-	});
-},
+		sendResponse(res, {
+			statusCode: httpStatus.OK,
+			success: true,
+			message: "My doctor appointments retrieved successfully",
+			data: result.data,
+			meta: result.meta,
+		});
+	},
 );
 
 const getAllAppointments = catchAsync(async (req: Request, res: Response) => {
@@ -129,19 +133,23 @@ const getAllAppointments = catchAsync(async (req: Request, res: Response) => {
 	});
 });
 
-const getSingleAppointmentDetails = catchAsync(async (req: Request, res: Response) => {
-	const appointmentId = req.params.appointmentId;
-	const user = req.user!;
+const getSingleAppointmentDetails = catchAsync(
+	async (req: Request, res: Response) => {
+		const appointmentId = req.params.appointmentId;
+		const user = req.user!;
 
-	const result = await AppointmentServices.getSingleAppointmentDetails(appointmentId as string, user);
+		const result = await AppointmentServices.getSingleAppointmentDetails(
+			appointmentId as string,
+			user,
+		);
 
-	sendResponse(res, {
-		statusCode: httpStatus.OK,
-		success: true,
-		message: "Single appointment details retrieved successfully",
-		data: result,
-	});
-},
+		sendResponse(res, {
+			statusCode: httpStatus.OK,
+			success: true,
+			message: "Single appointment details retrieved successfully",
+			data: result,
+		});
+	},
 );
 
 export const AppointmentController = {

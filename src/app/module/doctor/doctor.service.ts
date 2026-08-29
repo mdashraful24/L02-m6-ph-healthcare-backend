@@ -278,9 +278,10 @@ const approveDoctor = async (
 
 	const templatePath = path.join(
 		process.cwd(),
-		`src/app/templates/${isApproved
-			? "doctor-application-approved.ejs"
-			: "doctor-application-rejected.ejs"
+		`src/app/templates/${
+			isApproved
+				? "doctor-application-approved.ejs"
+				: "doctor-application-rejected.ejs"
 		}`,
 	);
 
@@ -584,7 +585,7 @@ const getAllDoctorsListPublic = async (query: IQuery) => {
 						contains: query.searchTerm,
 						mode: "insensitive",
 					},
-				}
+				},
 			],
 		});
 	}
@@ -694,7 +695,7 @@ const getSingleDoctorPublicProfile = async (doctorId: string) => {
 			// 		availableSlots: true,
 			// 	},
 			// },
-		}
+		},
 	});
 
 	if (!doctor) {
