@@ -6,6 +6,7 @@ import {
 	isSameDay,
 	startOfDay,
 	startOfToday,
+	subHours,
 } from "date-fns";
 import httpStatus from "http-status";
 import { ScheduleStatus } from "../../../generated/prisma/enums";
@@ -298,6 +299,7 @@ const getTodaysSchedules = async (query: IQuery) => {
 	const now = new Date();
 	const startOfToday = startOfDay(now);
 	const startOfTomorrow = addDays(startOfToday, 1);
+	const cutOffTime = subHours(now, 1);
 
 	const andConditions: ScheduleWhereInput[] = [
 		{
@@ -313,7 +315,8 @@ const getTodaysSchedules = async (query: IQuery) => {
 			startDateTime: {
 				gte: startOfToday,
 				lt: startOfTomorrow,
-				gt: now,
+				gt: cutOffTime,
+				// gt: now,
 			},
 		},
 		{
