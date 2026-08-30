@@ -1,0 +1,1035 @@
+{
+  "info": {
+    "_postman_id": "8d7794d6-3a02-4e90-9450-19400fc0cfd6",
+    "name": "PH Healthcare System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54687734",
+    "_collection_link": "https://go.postman.co/collection/54687734-8d7794d6-3a02-4e90-9450-19400fc0cfd6?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Credentials Base",
+          "item": [
+            {
+              "name": "Register Patient",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"johndoe@example.com\",\n    \"password\": \"Pass@1234\",\n    \"patient\": {\n        \"contactNumber\": \"+8801712345678\"\n    }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/auth/register",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "5000",
+                  "path": ["api", "v1", "auth", "register"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Verify Email",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"johndoe@example.com\",\n    \"otp\": \"123456\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/auth/verify-email",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "5000",
+                  "path": ["api", "v1", "auth", "verify-email"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Login Patient",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"johndoe@example.com\",\n    \"password\": \"Pass@1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/auth/login",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "5000",
+                  "path": ["api", "v1", "auth", "login"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Me (Current User Profile)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/auth/me",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "5000",
+                  "path": ["api", "v1", "auth", "me"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Refresh Token",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/auth/refresh-token",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "5000",
+                  "path": ["api", "v1", "auth", "refresh-token"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Password Recovery",
+          "item": [
+            {
+              "name": "Forgot Password",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"johndoe@example.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/auth/forgot-password",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "5000",
+                  "path": ["api", "v1", "auth", "forgot-password"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Reset Password",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"johndoe@example.com\",\n    \"otp\": \"123456\",\n    \"newPassword\": \"NewPass@1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/auth/reset-password",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "5000",
+                  "path": ["api", "v1", "auth", "reset-password"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Google OAuth Base",
+          "item": [
+            {
+              "name": "Google Login",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"idToken\": \"your-google-id-token-here\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/auth/google",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "5000",
+                  "path": ["api", "v1", "auth", "google"]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Upload Profile Picture",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "profilePicture",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/user/upload-profile-picture",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "user", "upload-profile-picture"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Doctor",
+      "item": [
+        {
+          "name": "Apply As Doctor",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "resume",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "additionalDocuments",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "data",
+                  "value": "{\n    \"user\": {\n        \"name\": \"Dr. Sarah Khan\",\n        \"email\": \"sarah.khan@example.com\"\n    },\n    \"doctor\": {\n        \"address\": \"Banani, Dhaka, Bangladesh\",\n        \"specialization\": \"Cardiology\",\n        \"licenseNumber\": \"BMDC-10045\",\n        \"qualifications\": \"MBBS, FCPS in Cardiology\",\n        \"experienceYears\": 8,\n        \"bio\": \"Dr. Sarah Khan is a board-certified cardiologist specializing in preventive cardiology, heart failure management, and interventional procedures.\",\n        \"consultationFee\": 2000,\n        \"contactNumber\": \"+8801912345678\"\n    }\n}",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/doctor/apply-as-doctor",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "doctor", "apply-as-doctor"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Doctor Email",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"sarah.khan@example.com\",\n    \"otp\": \"654321\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/doctor/apply-as-doctor/verify-email",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "doctor", "apply-as-doctor", "verify-email"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Approve Doctor",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"doctorId\": \"doctor-uuid-here\",\n    \"verificationStatus\": \"VERIFIED\",\n    \"rejectionReason\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/doctor/approve-doctor",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "doctor", "approve-doctor"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reject Doctor",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"doctorId\": \"doctor-uuid-here\",\n    \"verificationStatus\": \"REJECTED\",\n    \"rejectionReason\": \"The submitted professional documents could not be verified.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/doctor/approve-doctor",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "doctor", "approve-doctor"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Doctors (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/doctor/all-doctors?page=1&limit=10&sortBy=createdAt&sortOrder=desc&searchTerm=&specialization=&verificationStatus=",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "doctor", "all-doctors"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number" },
+                { "key": "limit", "value": "10", "description": "Items per page" },
+                { "key": "sortBy", "value": "createdAt", "description": "Sort field" },
+                { "key": "sortOrder", "value": "desc", "description": "asc or desc" },
+                { "key": "searchTerm", "value": "", "description": "Search by name, email, specialization, licenseNumber" },
+                { "key": "specialization", "value": "", "description": "Filter by specialization" },
+                { "key": "verificationStatus", "value": "", "description": "VERIFIED, PENDING, REJECTED" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Doctors (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/doctor/all-doctors-public?page=1&limit=10&sortBy=name&sortOrder=asc&searchTerm=&specialization=&experienceYears=",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "doctor", "all-doctors-public"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number" },
+                { "key": "limit", "value": "10", "description": "Items per page" },
+                { "key": "sortBy", "value": "name", "description": "Sort field" },
+                { "key": "sortOrder", "value": "asc", "description": "asc or desc" },
+                { "key": "searchTerm", "value": "", "description": "Search by name, specialization, licenseNumber" },
+                { "key": "specialization", "value": "", "description": "Filter by specialization" },
+                { "key": "experienceYears", "value": "", "description": "Minimum experience years (gte filter)" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Available Doctors Today",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/doctor/available-doctors-today?page=1&limit=10&sortBy=name&sortOrder=asc&searchTerm=&specialization=",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "doctor", "available-doctors-today"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number" },
+                { "key": "limit", "value": "10", "description": "Items per page" },
+                { "key": "sortBy", "value": "name", "description": "Sort field" },
+                { "key": "sortOrder", "value": "asc", "description": "asc or desc" },
+                { "key": "searchTerm", "value": "", "description": "Search by name, specialization" },
+                { "key": "specialization", "value": "", "description": "Filter by specialization" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Doctor Public Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/doctor/public/doctor-uuid-here",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "doctor", "public", ":doctorId"],
+              "variable": [
+                {
+                  "key": "doctorId",
+                  "value": "doctor-uuid-here",
+                  "description": "Doctor's UUID"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Doctor Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"address\": \"Dhanmondi, Dhaka, Bangladesh\",\n    \"bio\": \"Updated bio with more details about specializations and achievements.\",\n    \"consultationFee\": 2500,\n    \"contactNumber\": \"+8801812345678\",\n    \"imageUrl\": \"https://example.com/photo.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/doctor/update-my-profile",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "doctor", "update-my-profile"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Schedule",
+      "item": [
+        {
+          "name": "Create Schedule",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"startDateTime\": \"2026-09-01T09:00:00.000Z\",\n    \"endDateTime\": \"2026-09-01T12:00:00.000Z\",\n    \"meetingLink\": \"https://meet.google.com/abc-defg-hij\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/schedule/create-schedule",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "schedule", "create-schedule"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Schedules (Doctor)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/schedule/my-schedules?page=1&limit=10&sortBy=startDateTime&sortOrder=desc&status=",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "schedule", "my-schedules"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number" },
+                { "key": "limit", "value": "10", "description": "Items per page" },
+                { "key": "sortBy", "value": "startDateTime", "description": "Sort field" },
+                { "key": "sortOrder", "value": "desc", "description": "asc or desc" },
+                { "key": "status", "value": "", "description": "DRAFT or PUBLISHED" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Schedules (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/schedule/all-schedules?page=1&limit=10&sortBy=startDateTime&sortOrder=desc&searchTerm=&doctorId=&email=&status=",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "schedule", "all-schedules"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number" },
+                { "key": "limit", "value": "10", "description": "Items per page" },
+                { "key": "sortBy", "value": "startDateTime", "description": "Sort field" },
+                { "key": "sortOrder", "value": "desc", "description": "asc or desc" },
+                { "key": "searchTerm", "value": "", "description": "Search by doctor name, email, specialization" },
+                { "key": "doctorId", "value": "", "description": "Filter by doctor UUID" },
+                { "key": "email", "value": "", "description": "Filter by doctor email" },
+                { "key": "status", "value": "", "description": "DRAFT or PUBLISHED" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Today's Schedules (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/schedule/todays-schedules?doctorId=doctor-uuid-here&page=1&limit=10&sortBy=startDateTime&sortOrder=asc",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "schedule", "todays-schedules"],
+              "query": [
+                { "key": "doctorId", "value": "doctor-uuid-here", "description": "Doctor UUID (required)" },
+                { "key": "page", "value": "1", "description": "Page number" },
+                { "key": "limit", "value": "10", "description": "Items per page" },
+                { "key": "sortBy", "value": "startDateTime", "description": "Sort field" },
+                { "key": "sortOrder", "value": "asc", "description": "asc or desc" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Schedule By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/schedule/schedule-uuid-here",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "schedule", ":scheduleId"],
+              "variable": [
+                {
+                  "key": "scheduleId",
+                  "value": "schedule-uuid-here",
+                  "description": "Schedule UUID"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Schedule",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"startDateTime\": \"2026-09-01T14:00:00.000Z\",\n    \"endDateTime\": \"2026-09-01T17:00:00.000Z\",\n    \"meetingLink\": \"https://meet.google.com/xyz-uvwx-rst\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/schedule/update-schedule/schedule-uuid-here",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "schedule", "update-schedule", ":scheduleId"],
+              "variable": [
+                {
+                  "key": "scheduleId",
+                  "value": "schedule-uuid-here",
+                  "description": "Schedule UUID"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Publish Schedule",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/schedule/publish-schedule/schedule-uuid-here",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "schedule", "publish-schedule", ":scheduleId"],
+              "variable": [
+                {
+                  "key": "scheduleId",
+                  "value": "schedule-uuid-here",
+                  "description": "Schedule UUID"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Schedule",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/schedule/delete-schedule/schedule-uuid-here",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "schedule", "delete-schedule", ":scheduleId"],
+              "variable": [
+                {
+                  "key": "scheduleId",
+                  "value": "schedule-uuid-here",
+                  "description": "Schedule UUID"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Appointment",
+      "item": [
+        {
+          "name": "Book Appointment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"scheduleId\": \"schedule-uuid-here\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/appointment/book-appointment",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "appointment", "book-appointment"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Pay Appointment (Re-initiate Payment)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"appointmentId\": \"appointment-uuid-here\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/appointment/pay-appointment",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "appointment", "pay-appointment"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Appointment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"appointmentId\": \"appointment-uuid-here\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/appointment/cancel-appointment",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "appointment", "cancel-appointment"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Appointment Status (Doctor)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"status\": \"ONGOING\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/appointment/update-appointment-status/appointment-uuid-here",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "appointment", "update-appointment-status", ":appointmentId"],
+              "variable": [
+                {
+                  "key": "appointmentId",
+                  "value": "appointment-uuid-here",
+                  "description": "Appointment UUID"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "My Appointments (Patient)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/appointment/my-appointments?page=1&limit=10&sortBy=createdAt&sortOrder=desc&status=",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "appointment", "my-appointments"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number" },
+                { "key": "limit", "value": "10", "description": "Items per page" },
+                { "key": "sortBy", "value": "createdAt", "description": "Sort field" },
+                { "key": "sortOrder", "value": "desc", "description": "asc or desc" },
+                { "key": "status", "value": "", "description": "PENDING, CONFIRMED, ONGOING, COMPLETED, CANCELLED" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Doctor Appointments (Doctor)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/appointment/doctor-appointments?page=1&limit=10&sortBy=createdAt&sortOrder=desc&status=",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "appointment", "doctor-appointments"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number" },
+                { "key": "limit", "value": "10", "description": "Items per page" },
+                { "key": "sortBy", "value": "createdAt", "description": "Sort field" },
+                { "key": "sortOrder", "value": "desc", "description": "asc or desc" },
+                { "key": "status", "value": "", "description": "PENDING, CONFIRMED, ONGOING, COMPLETED, CANCELLED" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "All Appointments (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/appointment/all-appointments?page=1&limit=10&sortBy=createdAt&sortOrder=desc&status=&doctorId=&patientId=&doctorName=&doctorEmail=&doctorContactNumber=&patientName=&patientEmail=&patientContactNumber=",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "appointment", "all-appointments"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number" },
+                { "key": "limit", "value": "10", "description": "Items per page" },
+                { "key": "sortBy", "value": "createdAt", "description": "Sort field" },
+                { "key": "sortOrder", "value": "desc", "description": "asc or desc" },
+                { "key": "status", "value": "", "description": "PENDING, CONFIRMED, ONGOING, COMPLETED, CANCELLED" },
+                { "key": "doctorId", "value": "", "description": "Filter by doctor UUID" },
+                { "key": "patientId", "value": "", "description": "Filter by patient UUID" },
+                { "key": "doctorName", "value": "", "description": "Filter by doctor name" },
+                { "key": "doctorEmail", "value": "", "description": "Filter by doctor email" },
+                { "key": "doctorContactNumber", "value": "", "description": "Filter by doctor contact number" },
+                { "key": "patientName", "value": "", "description": "Filter by patient name" },
+                { "key": "patientEmail", "value": "", "description": "Filter by patient email" },
+                { "key": "patientContactNumber", "value": "", "description": "Filter by patient contact number" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Appointment Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/appointment/appointment-uuid-here",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "appointment", ":appointmentId"],
+              "variable": [
+                {
+                  "key": "appointmentId",
+                  "value": "appointment-uuid-here",
+                  "description": "Appointment UUID"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Payment",
+      "item": [
+        {
+          "name": "My Payments (Patient)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/payment/my-payments?page=1&limit=10&sortBy=createdAt&sortOrder=desc&searchTerm=",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "payment", "my-payments"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number" },
+                { "key": "limit", "value": "10", "description": "Items per page" },
+                { "key": "sortBy", "value": "createdAt", "description": "Sort field" },
+                { "key": "sortOrder", "value": "desc", "description": "asc or desc" },
+                { "key": "searchTerm", "value": "", "description": "Search by doctor name, email, specialization" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "All Payments (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/payment/all-payments?page=1&limit=10&sortBy=createdAt&sortOrder=desc&searchTerm=",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "payment", "all-payments"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number" },
+                { "key": "limit", "value": "10", "description": "Items per page" },
+                { "key": "sortBy", "value": "createdAt", "description": "Sort field" },
+                { "key": "sortOrder", "value": "desc", "description": "asc or desc" },
+                { "key": "searchTerm", "value": "", "description": "Search by patient name, email, contactNumber" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Payment Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/payment/payment-uuid-here",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "payment", ":paymentId"],
+              "variable": [
+                {
+                  "key": "paymentId",
+                  "value": "payment-uuid-here",
+                  "description": "Payment UUID"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Prescription",
+      "item": [
+        {
+          "name": "Create Prescription (Doctor)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"appointmentId\": \"appointment-uuid-here\",\n    \"findings\": \"Patient presents with mild hypertension and elevated heart rate. Blood pressure reading: 140/90 mmHg. Recommended lifestyle changes along with medication.\",\n    \"medicines\": [\n        {\n            \"name\": \"Amlodipine\",\n            \"dosage\": \"5mg\",\n            \"duration\": \"30 days\",\n            \"instructions\": \"Take once daily in the morning\"\n        },\n        {\n            \"name\": \"Metoprolol\",\n            \"dosage\": \"25mg\",\n            \"duration\": \"15 days\",\n            \"instructions\": \"Take twice daily after meals\"\n        },\n        {\n            \"name\": \"Aspirin\",\n            \"dosage\": \"75mg\",\n            \"duration\": \"30 days\",\n            \"instructions\": \"Take once daily after lunch\"\n        }\n    ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/prescription/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "prescription", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Prescription",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/prescription/appointment-uuid-here",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "prescription", ":appointmentId"],
+              "variable": [
+                {
+                  "key": "appointmentId",
+                  "value": "appointment-uuid-here",
+                  "description": "Appointment UUID"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Patient Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/analytics/patient-analytics",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "analytics", "patient-analytics"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Doctor Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/analytics/doctor-analytics",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "analytics", "doctor-analytics"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/analytics/admin-analytics",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "analytics", "admin-analytics"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
