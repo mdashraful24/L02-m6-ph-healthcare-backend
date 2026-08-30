@@ -124,7 +124,7 @@ const createPrescription = async (
 		.fontSize(22)
 		.font("Helvetica-Bold")
 		.fillColor(primaryColor)
-		.text("🩺 PH HEALTHCARE", {
+		.text("PH HEALTHCARE", {
 			align: "center",
 		});
 
@@ -509,6 +509,7 @@ const getSinglePrescription = async (
 		include: {
 			patient: {
 				select: {
+					id: true,
 					name: true,
 					email: true,
 					contactNumber: true,
@@ -517,6 +518,7 @@ const getSinglePrescription = async (
 			},
 			doctor: {
 				select: {
+					id: true,
 					name: true,
 					email: true,
 					contactNumber: true,

@@ -502,7 +502,6 @@ const getAvailableDoctorByTodaysSchedule = async (query: IQuery) => {
 			experienceYears: true,
 			bio: true,
 			consultationFee: true,
-			imageUrl: true,
 			createdAt: true,
 
 			schedules: {
@@ -628,7 +627,6 @@ const getAllDoctorsListPublic = async (query: IQuery) => {
 			experienceYears: true,
 			bio: true,
 			consultationFee: true,
-			imageUrl: true,
 			createdAt: true,
 		},
 	});

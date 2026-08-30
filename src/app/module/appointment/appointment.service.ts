@@ -463,7 +463,7 @@ const bookAppointmentCallback = async (query: Record<string, any>) => {
 				.fontSize(22)
 				.font("Helvetica-Bold")
 				.fillColor(primaryColor)
-				.text("🩺 PH HEALTHCARE", {
+				.text("PH HEALTHCARE", {
 					align: "center",
 				});
 
@@ -580,12 +580,12 @@ const bookAppointmentCallback = async (query: Record<string, any>) => {
 						"dd MMMM yyyy",
 					)}`,
 				)
-				.text(
-					`Schedule Time: ${format(
-						appointment.schedule.startDateTime,
-						"hh:mm a",
-					)} - ${format(appointment.schedule.endDateTime, "hh:mm a")}`,
-				)
+				// .text(
+				// 	`Schedule Time: ${format(
+				// 		appointment.schedule.startDateTime,
+				// 		"hh:mm a",
+				// 	)} - ${format(appointment.schedule.endDateTime, "hh:mm a")}`,
+				// )
 				.text(`Joining Time: ${format(joiningTime, "hh:mm a")}`)
 				.text(`Serial Number: #${serialNumber}`);
 
@@ -743,6 +743,7 @@ const bookAppointmentCallback = async (query: Record<string, any>) => {
 				.text(
 					"This is a computer-generated invoice and does not require a signature.",
 					{
+						width: 545,
 						align: "center",
 					},
 				);
@@ -849,6 +850,9 @@ const bookAppointmentCallback = async (query: Record<string, any>) => {
 				redirectUrl: `${config.frontend_url}/dashboard/my-appointments?error=payment_failed`,
 			};
 		}
+	}, {
+		maxWait: 10000, // default is 2000
+		timeout: 30000, // default is 5000
 	});
 
 	return transactionResult;

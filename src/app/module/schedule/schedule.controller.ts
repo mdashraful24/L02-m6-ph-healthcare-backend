@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import httpStatus from "http-status";
+import type { IQuery } from "../../interfaces";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import { ScheduleService } from "./schedule.service";
@@ -19,7 +20,7 @@ const createSchedule = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getMySchedules = catchAsync(async (req: Request, res: Response) => {
-	const payload = req.body;
+	const payload = req.query as unknown as IQuery;
 	const user = req.user!;
 
 	const result = await ScheduleService.getMySchedules(payload, user);
@@ -34,7 +35,7 @@ const getMySchedules = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllSchedules = catchAsync(async (req: Request, res: Response) => {
-	const payload = req.body;
+	const payload = req.query as unknown as IQuery;
 
 	const result = await ScheduleService.getAllSchedules(payload);
 
@@ -48,7 +49,7 @@ const getAllSchedules = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getTodaysSchedules = catchAsync(async (req: Request, res: Response) => {
-	const payload = req.body;
+	const payload = req.query as unknown as IQuery;
 
 	const result = await ScheduleService.getTodaysSchedules(payload);
 

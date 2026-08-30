@@ -20,7 +20,7 @@ const createPrescription = catchAsync(async (req: Request, res: Response) => {
 
 const getSinglePrescription = catchAsync(
 	async (req: Request, res: Response) => {
-		const appointmentId = req.params.id;
+		const appointmentId = req.params.appointmentId;
 		const user = req.user!;
 
 		const result = await PrescriptionService.getSinglePrescription(
