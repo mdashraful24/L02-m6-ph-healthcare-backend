@@ -666,7 +666,7 @@ const getSingleDoctorPublicProfile = async (doctorId: string) => {
 			experienceYears: true,
 			bio: true,
 			consultationFee: true,
-			imageUrl: true,
+			// imageUrl: true,
 			createdAt: true,
 
 			// schedules: {
