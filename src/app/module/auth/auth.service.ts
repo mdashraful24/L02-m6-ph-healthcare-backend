@@ -1,10 +1,10 @@
-import httpStatus from "http-status";
+import crypto from "node:crypto";
+import path from "node:path";
 import bcrypt from "bcryptjs";
-import crypto from "crypto";
 import ejs from "ejs";
 import type { TokenPayload } from "google-auth-library";
+import httpStatus from "http-status";
 import type { JwtPayload, SignOptions } from "jsonwebtoken";
-import path from "path";
 import {
 	AuthProvider,
 	Role,
@@ -15,6 +15,7 @@ import { googleClient } from "../../lib/googleAuth";
 import { transporter } from "../../lib/nodemailer";
 import { prisma } from "../../lib/prisma";
 import { redisClient } from "../../lib/redis";
+import { AppError } from "../../utils/AppError";
 import { jwtUtils } from "../../utils/jwt";
 import type {
 	IForgotPasswordPayload,
@@ -25,7 +26,6 @@ import type {
 	IResetPasswordPayload,
 	IVerifyEmailPayload,
 } from "./auth.interface";
-import { AppError } from "../../utils/AppError";
 
 const registerPatient = async (payload: IRegisterPatientPayload) => {
 	const { name, password, patient: patientData } = payload;
@@ -684,6 +684,34 @@ const resetPassword = async (payload: IResetPasswordPayload) => {
 	});
 };
 
+// const logout = async (token: string) => {
+// 	const verifiedRefreshToken = jwtUtils.verifyToken(
+// 		token,
+// 		config.jwt_refresh_secret,
+// 	);
+
+// 	if (!verifiedRefreshToken.success || !verifiedRefreshToken.data) {
+// 		throw new AppError(
+// 			httpStatus.UNAUTHORIZED,
+// 			config.node_env === "development"
+// 				? (verifiedRefreshToken.error ?? "Invalid refresh token")
+// 				: "Invalid refresh token",
+// 		);
+// 	}
+
+// 	const data = verifiedRefreshToken.data as JwtPayload;
+
+// 	const user = await prisma.user.findUnique({
+// 		where: { id: data.userId },
+// 	});
+
+// 	if (!user || user.isDeleted || user.status !== UserStatus.ACTIVE) {
+// 		throw new AppError(httpStatus.NOT_FOUND, "User is inactive or not found");
+// 	}
+
+// 	return true;
+// };
+
 export const AuthService = {
 	registerPatient,
 	verifyPatientEmail,
@@ -693,4 +721,5 @@ export const AuthService = {
 	googleLogin,
 	forgotPassword,
 	resetPassword,
+	// logout,
 };
