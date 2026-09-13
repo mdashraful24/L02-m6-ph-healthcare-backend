@@ -18,6 +18,11 @@ router.post(
 	AuthController.verifyPatientEmail,
 );
 router.post(
+	"/resend-otp",
+	validateRequest(userAuthValidation.ResendRegistrationOtpZodSchema),
+	AuthController.resendRegistrationOtp,
+);
+router.post(
 	"/login",
 	validateRequest(userAuthValidation.UserLoginZodSchema),
 	AuthController.loginUser,
@@ -33,6 +38,11 @@ router.post(
 	"/forgot-password",
 	validateRequest(userAuthValidation.ForgotPassword),
 	AuthController.forgotPassword,
+);
+router.post(
+	"/resend-forgot-password-otp",
+	validateRequest(userAuthValidation.ForgotPassword),
+	AuthController.resendForgotPasswordOtp,
 );
 router.post(
 	"/reset-password",

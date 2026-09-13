@@ -22,6 +22,7 @@ import { AppError } from "../../utils/AppError";
 import type { IApplyAsDoctor, IUpdateDoctorProfile } from "./doctor.interface";
 import type {
 	IApproveDoctorPayload,
+	IResendDoctorOtpPayload,
 	IVerifyDoctorEmailPayload,
 } from "./doctor.validation";
 
@@ -217,6 +218,61 @@ const verifyDoctorEmail = async (payload: IVerifyDoctorEmailPayload) => {
 	});
 
 	return verifiedUser;
+};
+
+const resendDoctorOtp = async (payload: IResendDoctorOtpPayload) => {
+	const email = payload.email.trim().toLowerCase();
+
+	const existingUser = await prisma.user.findUnique({
+		where: {
+			email,
+			role: Role.DOCTOR,
+		},
+	});
+
+	if (!existingUser) {
+		throw new AppError(
+			httpStatus.NOT_FOUND,
+			"Doctor with this email does not exist.",
+		);
+	}
+
+	if (existingUser.emailVerified) {
+		throw new AppError(httpStatus.BAD_REQUEST, "Email is already verified.");
+	}
+
+	const otpKey = `doctor-application-otp:${email}`;
+	const otpValue = crypto.randomInt(100000, 1000000).toString();
+
+	const expirationSeconds = 60 * 60; // 1 hour
+
+	await redisClient.set(otpKey, otpValue, {
+		expiration: {
+			type: "EX",
+			value: expirationSeconds,
+		},
+	});
+
+	const templatePath = path.join(
+		process.cwd(),
+		"src/app/templates/registration-otp.ejs",
+	);
+
+	const templateData = {
+		name: existingUser.name,
+		email,
+		otp: otpValue,
+		expirationInMinutes: expirationSeconds / 60,
+	};
+
+	const html = await ejs.renderFile(templatePath, templateData);
+
+	await transporter.sendMail({
+		from: config.email_sender,
+		to: email,
+		subject: "Verify Your Email - PH Healthcare Management System",
+		html,
+	});
 };
 
 const approveDoctor = async (
@@ -729,6 +785,7 @@ const updateDoctorProfile = async (
 
 export const DoctorServices = {
 	applyAsDoctor,
+	resendDoctorOtp,
 	verifyDoctorEmail,
 	approveDoctor,
 	getAllDoctors,

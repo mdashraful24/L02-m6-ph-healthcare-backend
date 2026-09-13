@@ -79,6 +79,10 @@ export const VerifyDoctorEmailSchema = z.object({
 	otp: z.string().length(6, { message: "OTP must be 6 digits long" }),
 });
 
+export const ResendDoctorOtpSchema = z.object({
+	email: z.string().email("Not a valid email address"),
+});
+
 export const ApproveDoctorSchema = z
 	.object({
 		doctorId: z.string().uuid("Doctor ID must be a valid"),
@@ -137,6 +141,7 @@ export const UpdateDoctorProfileSchema = z.object({
 // Type definitions for the validation schemas
 export type IApplyAsDoctorPayload = z.infer<typeof ApplyAsDoctorSchema>;
 export type IVerifyDoctorEmailPayload = z.infer<typeof VerifyDoctorEmailSchema>;
+export type IResendDoctorOtpPayload = z.infer<typeof ResendDoctorOtpSchema>;
 export type IApproveDoctorPayload = z.infer<typeof ApproveDoctorSchema>;
 export type IUpdateDoctorProfilePayload = z.infer<
 	typeof UpdateDoctorProfileSchema
@@ -146,6 +151,7 @@ export type IUpdateDoctorProfilePayload = z.infer<
 export const doctorValidationSchemas = {
 	ApplyAsDoctorSchema,
 	VerifyDoctorEmailSchema,
+	ResendDoctorOtpSchema,
 	ApproveDoctorSchema,
 	UpdateDoctorProfileSchema,
 };

@@ -10,14 +10,27 @@ import { AuthService } from "./auth.service";
 const registerPatient = catchAsync(async (req: Request, res: Response) => {
 	const payload = req.body;
 
-	await AuthService.registerPatient(payload);
+	const result = await AuthService.registerPatient(payload);
 
 	sendResponse(res, {
 		statusCode: httpStatus.CREATED,
 		success: true,
 		message:
 			"Verification OTP sent to your email. Please verify your email to complete the registration process.",
-		data: null,
+		data: result,
+	});
+});
+
+const resendRegistrationOtp = catchAsync(async (req: Request, res: Response) => {
+	const payload = req.body;
+
+	const result = await AuthService.resendRegistrationOtp(payload);
+
+	sendResponse(res, {
+		statusCode: httpStatus.OK,
+		success: true,
+		message: "A new verification OTP has been sent to your email.",
+		data: result,
 	});
 });
 
@@ -167,15 +180,30 @@ const googleLogin = catchAsync(async (req: Request, res: Response) => {
 const forgotPassword = catchAsync(async (req: Request, res: Response) => {
 	const payload = req.body;
 
-	await AuthService.forgotPassword(payload);
+	const result = await AuthService.forgotPassword(payload);
 
 	sendResponse(res, {
 		statusCode: httpStatus.OK,
 		success: true,
 		message: `Otp sent to your email ${payload.email}`,
-		data: null,
+		data: result,
 	});
 });
+
+const resendForgotPasswordOtp = catchAsync(
+	async (req: Request, res: Response) => {
+		const payload = req.body;
+
+		const result = await AuthService.resendForgotPasswordOtp(payload);
+
+		sendResponse(res, {
+			statusCode: httpStatus.OK,
+			success: true,
+			message: `A new OTP has been sent to your email ${payload.email}`,
+			data: result,
+		});
+	},
+);
 
 const resetPassword = catchAsync(async (req: Request, res: Response) => {
 	const payload = req.body;
@@ -206,12 +234,14 @@ const logout = catchAsync(async (req: Request, res: Response) => {
 
 export const AuthController = {
 	registerPatient,
+	resendRegistrationOtp,
 	verifyPatientEmail,
 	loginUser,
 	getMe,
 	refreshToken,
 	googleLogin,
 	forgotPassword,
+	resendForgotPasswordOtp,
 	resetPassword,
 	logout,
 };

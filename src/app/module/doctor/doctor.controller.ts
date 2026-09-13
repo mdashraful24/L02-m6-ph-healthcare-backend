@@ -39,6 +39,19 @@ const applyAsDoctor = catchAsync(async (req: Request, res: Response) => {
 	});
 });
 
+const resendDoctorOtp = catchAsync(async (req: Request, res: Response) => {
+	const payload = req.body;
+
+	await DoctorServices.resendDoctorOtp(payload);
+
+	sendResponse(res, {
+		statusCode: httpStatus.OK,
+		success: true,
+		message: "A new verification OTP has been sent to your email.",
+		data: null,
+	});
+});
+
 const verifyDoctorEmail = catchAsync(async (req: Request, res: Response) => {
 	const payload = req.body;
 
@@ -144,6 +157,7 @@ const updateDoctorProfile = catchAsync(async (req: Request, res: Response) => {
 
 export const DoctorController = {
 	applyAsDoctor,
+	resendDoctorOtp,
 	verifyDoctorEmail,
 	approveDoctor,
 	getAllDoctors,

@@ -24,6 +24,12 @@ router.post(
 );
 
 router.post(
+	"/apply-as-doctor/resend-otp",
+	validateRequest(doctorValidationSchemas.ResendDoctorOtpSchema),
+	DoctorController.resendDoctorOtp,
+);
+
+router.post(
 	"/approve-doctor",
 	auth(Role.ADMIN, Role.SUPER_ADMIN),
 	validateRequest(doctorValidationSchemas.ApproveDoctorSchema),

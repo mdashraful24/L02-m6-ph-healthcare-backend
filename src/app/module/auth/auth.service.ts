@@ -23,6 +23,7 @@ import type {
 	ILoginUserPayload,
 	IRegisterPatientPayload,
 	IRequestUser,
+	IResendOtpPayload,
 	IResetPasswordPayload,
 	IVerifyEmailPayload,
 } from "./auth.interface";
@@ -48,8 +49,14 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
 		Number(config.bcrypt_salt_rounds),
 	);
 
-	// Store OTP and user data in Redis with expiration
-	const expirationInSeconds = 5 * 60;
+	// The OTP expires in 2 minutes but the pending registration data
+	// stays valid for 5 minutes so the user can still resend a new OTP
+	// after the current one expires.
+	const otpExpirationInSeconds = 2 * 60;
+	const registrationSessionExpirationInSeconds = 5 * 60;
+	const otpExpiresAt = new Date(
+		Date.now() + otpExpirationInSeconds * 1000,
+	).toISOString();
 
 	// Generate a random OTP and store it in Redis with an expiration time
 	const otpKey = `patient-registration-otp:${email}`;
@@ -63,7 +70,7 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
 	await redisClient.set(otpKey, otpValue, {
 		expiration: {
 			type: "EX",
-			value: expirationInSeconds,
+			value: otpExpirationInSeconds,
 		},
 	});
 
@@ -82,7 +89,7 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
 		{
 			expiration: {
 				type: "EX",
-				value: expirationInSeconds,
+				value: registrationSessionExpirationInSeconds,
 			},
 		},
 	);
@@ -96,7 +103,7 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
 		name,
 		email,
 		otp: otpValue,
-		expirationInMinutes: expirationInSeconds / 60,
+		expirationInMinutes: otpExpirationInSeconds / 60,
 	};
 
 	const html = await ejs.renderFile(templatePath, templateData);
@@ -107,6 +114,84 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
 		subject: "Verify Your Email - PH Healthcare Management System",
 		html,
 	});
+
+	return { expiresIn: otpExpirationInSeconds, expiresAt: otpExpiresAt };
+};
+
+const resendRegistrationOtp = async (payload: IResendOtpPayload) => {
+	const email = payload.email.trim().toLowerCase();
+
+	const isUserExists = await prisma.user.findUnique({
+		where: { email },
+	});
+
+	if (isUserExists) {
+		throw new AppError(
+			httpStatus.CONFLICT,
+			"User with this email already exists",
+		);
+	}
+
+	const patientRegistrationKey = `patient-registration-data:${email}`;
+
+	const redisPatientData = await redisClient.get(patientRegistrationKey);
+
+	if (!redisPatientData) {
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			"Registration session has expired. Please register again.",
+		);
+	}
+
+	const patientPayload: IRegisterPatientPayload = JSON.parse(redisPatientData);
+
+	const otpKey = `patient-registration-otp:${email}`;
+	const otpValue = crypto.randomInt(100000, 1000000).toString();
+
+	const otpExpirationInSeconds = 2 * 60;
+	const registrationSessionExpirationInSeconds = 5 * 60;
+	const otpExpiresAt = new Date(
+		Date.now() + otpExpirationInSeconds * 1000,
+	).toISOString();
+
+	//! This condition is added for development purpose only.
+	if (config.node_env === "development") {
+		console.log(`[dev] OTP ${email} : ${otpValue}`);
+	}
+
+	await redisClient.set(otpKey, otpValue, {
+		expiration: {
+			type: "EX",
+			value: otpExpirationInSeconds,
+		},
+	});
+
+	// Refresh the pending registration session so the user can keep
+	// resending a fresh OTP within the 5 minute session window.
+	await redisClient.expire(patientRegistrationKey, registrationSessionExpirationInSeconds);
+
+	const templatePath = path.join(
+		process.cwd(),
+		"src/app/templates/registration-otp.ejs",
+	);
+
+	const templateData = {
+		name: patientPayload.name,
+		email,
+		otp: otpValue,
+		expirationInMinutes: otpExpirationInSeconds / 60,
+	};
+
+	const html = await ejs.renderFile(templatePath, templateData);
+
+	await transporter.sendMail({
+		from: config.email_sender,
+		to: email,
+		subject: "Verify Your Email - PH Healthcare Management System",
+		html,
+	});
+
+	return { expiresIn: otpExpirationInSeconds, expiresAt: otpExpiresAt };
 };
 
 const verifyPatientEmail = async (payload: IVerifyEmailPayload) => {
@@ -574,6 +659,9 @@ const forgotPassword = async (payload: IForgotPasswordPayload) => {
 	const key = `forgot-password:${isUserExists.email}`;
 
 	const expirationInSeconds = 5 * 60;
+	const otpExpiresAt = new Date(
+		Date.now() + expirationInSeconds * 1000,
+	).toISOString();
 
 	await redisClient.set(key, otp, {
 		expiration: {
@@ -603,6 +691,82 @@ const forgotPassword = async (payload: IForgotPasswordPayload) => {
 		// html: `<h1>PH Healthcare</h1><p>Your OTP for reset password is: ${otp}. It will be valid for 5 minutes.</p>`
 		html,
 	});
+
+	return { expiresIn: expirationInSeconds, expiresAt: otpExpiresAt };
+};
+
+const resendForgotPasswordOtp = async (payload: IForgotPasswordPayload) => {
+	const { email } = payload;
+	const isUserExists = await prisma.user.findUnique({
+		where: { email },
+	});
+
+	if (!isUserExists) {
+		throw new AppError(httpStatus.NOT_FOUND, "User not found");
+	}
+
+	if (isUserExists.status === UserStatus.BLOCKED) {
+		throw new AppError(httpStatus.FORBIDDEN, "User is blocked");
+	}
+
+	if (!isUserExists.emailVerified) {
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			"Your email is not verified. Please verify your email.",
+		);
+	}
+
+	if (isUserExists.isDeleted || isUserExists.status === UserStatus.DELETED) {
+		throw new AppError(httpStatus.FORBIDDEN, "User is deleted");
+	}
+
+	if (
+		isUserExists.googleId &&
+		isUserExists.authProvider === AuthProvider.GOOGLE
+	) {
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			"User is registered with Google. Please try to login using Google.",
+		);
+	}
+
+	const otp = crypto.randomInt(100000, 1000000).toString();
+
+	const key = `forgot-password:${isUserExists.email}`;
+
+	const expirationInSeconds = 5 * 60;
+	const otpExpiresAt = new Date(
+		Date.now() + expirationInSeconds * 1000,
+	).toISOString();
+
+	await redisClient.set(key, otp, {
+		expiration: {
+			type: "EX",
+			value: expirationInSeconds,
+		},
+	});
+
+	const templatePath = path.join(
+		process.cwd(),
+		"src/app/templates/forgot-password.ejs",
+	);
+
+	const templateData = {
+		name: isUserExists.name,
+		otp,
+		expirationInMinutes: expirationInSeconds / 60,
+	};
+
+	const html = await ejs.renderFile(templatePath, templateData);
+
+	await transporter.sendMail({
+		from: config.email_sender,
+		to: isUserExists.email,
+		subject: "Password Reset OTP - PH Healthcare Management System",
+		html,
+	});
+
+	return { expiresIn: expirationInSeconds, expiresAt: otpExpiresAt };
 };
 
 const resetPassword = async (payload: IResetPasswordPayload) => {
@@ -719,12 +883,14 @@ const resetPassword = async (payload: IResetPasswordPayload) => {
 
 export const AuthService = {
 	registerPatient,
+	resendRegistrationOtp,
 	verifyPatientEmail,
 	loginUser,
 	getMe,
 	refreshToken,
 	googleLogin,
 	forgotPassword,
+	resendForgotPasswordOtp,
 	resetPassword,
 	// logout,
 };
