@@ -115,7 +115,7 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
 		html,
 	});
 
-	return { expiresIn: otpExpirationInSeconds, expiresAt: otpExpiresAt };
+	return { expiresIn: otpExpirationInSeconds, expiresAt: otpExpiresAt, sessionExpiresIn: registrationSessionExpirationInSeconds };
 };
 
 const resendRegistrationOtp = async (payload: IResendOtpPayload) => {
@@ -191,7 +191,7 @@ const resendRegistrationOtp = async (payload: IResendOtpPayload) => {
 		html,
 	});
 
-	return { expiresIn: otpExpirationInSeconds, expiresAt: otpExpiresAt };
+	return { expiresIn: otpExpirationInSeconds, expiresAt: otpExpiresAt, sessionExpiresIn: registrationSessionExpirationInSeconds };
 };
 
 const verifyPatientEmail = async (payload: IVerifyEmailPayload) => {
