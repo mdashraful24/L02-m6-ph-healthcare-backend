@@ -19,6 +19,7 @@ import { prisma } from "../../lib/prisma";
 import { redisClient } from "../../lib/redis";
 import type { RequestUser } from "../../middleware/checkAuth";
 import { AppError } from "../../utils/AppError";
+import generateRandomPassword from "../../utils/generateRandomPassword";
 import type { IApplyAsDoctor, IUpdateDoctorProfile } from "./doctor.interface";
 import type {
 	IApproveDoctorPayload,
@@ -92,16 +93,16 @@ const applyAsDoctor = async (
 		}),
 	);
 
-	const randomDoctorPassword = Math.random().toString(36).slice(-8);
-	const hashedPassword = await bcrypt.hash(
-		randomDoctorPassword,
-		Number(config.bcrypt_salt_rounds),
-	);
+	// const randomDoctorPassword = Math.random().toString(36).slice(-8);
+	// const hashedPassword = await bcrypt.hash(
+	// 	randomDoctorPassword,
+	// 	Number(config.bcrypt_salt_rounds),
+	// );
 
 	const doctorApplication = await prisma.user.create({
 		data: {
 			...payload.user,
-			password: hashedPassword,
+			// password: hashedPassword,
 			role: Role.DOCTOR,
 			needPasswordChange: true,
 			doctor: {
@@ -311,9 +312,28 @@ const approveDoctor = async (
 	if (existingDoctor.verificationStatus !== DoctorVerificationStatus.PENDING) {
 		throw new AppError(
 			httpStatus.BAD_REQUEST,
-			`Doctor application is already ${verificationStatus.toLowerCase()}.`,
+			`Doctor application is already been ${existingDoctor.verificationStatus.toLowerCase()}.`,
 		);
 	}
+
+	if (verificationStatus === DoctorVerificationStatus.REJECTED && !rejectionReason) {
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			"Rejection reason is required when rejecting a doctor application.",
+		);
+	}
+
+	const isApproved = verificationStatus === DoctorVerificationStatus.VERIFIED;
+
+	const randomDoctorPassword = isApproved ? generateRandomPassword() : undefined;
+
+	if (config.node_env === "development" && randomDoctorPassword) {
+		console.log(`[dev] Random Password plain text: ${randomDoctorPassword}`);
+	}
+
+	const hashedPassword = randomDoctorPassword
+		? await bcrypt.hash(randomDoctorPassword, Number(config.bcrypt_salt_rounds))
+		: undefined;
 
 	const updatedDoctor = await prisma.doctor.update({
 		where: {
@@ -327,17 +347,15 @@ const approveDoctor = async (
 					: null,
 			reviewedBy: reviewer.userId,
 			reviewedAt: new Date(),
+			...(hashedPassword ? { user: { update: { password: hashedPassword } } } : {}),
 		},
 	});
 
-	const isApproved = verificationStatus === DoctorVerificationStatus.VERIFIED;
-
 	const templatePath = path.join(
 		process.cwd(),
-		`src/app/templates/${
-			isApproved
-				? "doctor-application-approved.ejs"
-				: "doctor-application-rejected.ejs"
+		`src/app/templates/${isApproved
+			? "doctor-application-approved.ejs"
+			: "doctor-application-rejected.ejs"
 		}`,
 	);
 
@@ -345,6 +363,7 @@ const approveDoctor = async (
 		name: updatedDoctor.name,
 		email: updatedDoctor.email,
 		reason: updatedDoctor.rejectionReason,
+		...(isApproved ? { password: randomDoctorPassword } : {}),
 	};
 
 	const html = await ejs.renderFile(templatePath, templateData);
