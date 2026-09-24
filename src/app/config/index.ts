@@ -51,4 +51,7 @@ export default {
 	bkash_app_key: process.env.BKASH_APP_KEY!,
 	bkash_app_secret: process.env.BKASH_APP_SECRET!,
 	bkash_callback_url: process.env.BKASH_CALLBACK_URL!,
+
+	// Booking closes this many minutes before the schedule starts
+	booking_cutoff_minutes: Number(process.env.BOOKING_CUTOFF_MINUTES) || 30,
 };

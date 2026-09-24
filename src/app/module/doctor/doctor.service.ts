@@ -516,13 +516,15 @@ const getAvailableDoctorByTodaysSchedule = async (query: IQuery) => {
 				some: {
 					isDeleted: false,
 					status: ScheduleStatus.PUBLISHED,
+					availableSlots: {
+						gt: 0,
+					},
 					startDateTime: {
 						gte: startOfToday,
 						lt: startOfTomorrow,
-						gt: now,
 					},
-					availableSlots: {
-						gt: 0,
+					endDateTime: {
+						gt: now,
 					},
 				},
 			},
@@ -583,13 +585,15 @@ const getAvailableDoctorByTodaysSchedule = async (query: IQuery) => {
 				where: {
 					isDeleted: false,
 					status: ScheduleStatus.PUBLISHED,
+					availableSlots: {
+						gt: 0,
+					},
 					startDateTime: {
 						gte: startOfToday,
 						lt: startOfTomorrow,
-						gt: now,
 					},
-					availableSlots: {
-						gt: 0,
+					endDateTime: {
+						gt: now,
 					},
 				},
 

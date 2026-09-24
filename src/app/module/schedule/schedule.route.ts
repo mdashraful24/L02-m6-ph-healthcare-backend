@@ -26,7 +26,7 @@ router.get(
 	ScheduleController.getAllSchedules,
 );
 
-router.get("/todays-schedules", ScheduleController.getTodaysSchedules);
+router.get("/todays-schedule", ScheduleController.getTodaysSchedules);
 
 router.get(
 	"/:scheduleId",

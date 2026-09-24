@@ -1,6 +1,7 @@
 import {
 	addDays,
 	addHours,
+	addMinutes,
 	differenceInMinutes,
 	isAfter,
 	isSameDay,
@@ -11,6 +12,7 @@ import {
 import httpStatus from "http-status";
 import { ScheduleStatus } from "../../../generated/prisma/enums";
 import type { ScheduleWhereInput } from "../../../generated/prisma/models";
+import config from "../../config";
 import type { IQuery } from "../../interfaces";
 import { prisma } from "../../lib/prisma";
 import type { RequestUser } from "../../middleware/checkAuth";
@@ -297,9 +299,12 @@ const getTodaysSchedules = async (query: IQuery) => {
 	const sortOrder = query.sortOrder ? query.sortOrder : "desc";
 
 	const now = new Date();
-	const startOfToday = startOfDay(now);
-	const startOfTomorrow = addDays(startOfToday, 1);
-	const cutOffTime = subHours(now, 1);
+	// const startOfToday = startOfDay(now);
+	// const startOfTomorrow = addDays(startOfToday, 1);
+	// const cutOffTime = subHours(now, 1);
+	// Booking closes config.booking_cutoff_minutes minutes before startDateTime
+	const bookingDeadline = addMinutes(now, config.booking_cutoff_minutes);
+	const startOfTomorrow = addDays(startOfDay(now), 1);
 
 	const andConditions: ScheduleWhereInput[] = [
 		{
@@ -313,10 +318,13 @@ const getTodaysSchedules = async (query: IQuery) => {
 		},
 		{
 			startDateTime: {
-				gte: startOfToday,
+				// gte: startOfToday,
+				// lt: startOfTomorrow,
+				gte: bookingDeadline,
 				lt: startOfTomorrow,
-				gt: cutOffTime,
-				// gt: now,
+			},
+			endDateTime: {
+				gt: now,
 			},
 		},
 		{
@@ -353,111 +361,6 @@ const getTodaysSchedules = async (query: IQuery) => {
 		},
 	};
 };
-
-// Filter schedules for today, considering a 1-hour cutoff
-// const getTodaysSchedules = async (query: IQuery) => {
-//     if (!query.doctorId) {
-//         throw new AppError(httpStatus.BAD_REQUEST, "Doctor ID is required");
-//     }
-
-//     const doctor = await prisma.doctor.findUnique({
-//         where: {
-//             id: query.doctorId
-//         }
-//     });
-
-//     if (!doctor) {
-//         throw new AppError(httpStatus.NOT_FOUND, "Doctor not found");
-//     }
-
-//     const limit = query.limit ? Number(query.limit) : 10;
-//     const page = query.page ? Number(query.page) : 1;
-//     const skip = (page - 1) * limit;
-//     const sortBy = query.sortBy ? query.sortBy : "createdAt";
-//     const sortOrder = query.sortOrder ? query.sortOrder : "desc";
-
-//     const now = new Date();
-//     const startOfToday = startOfDay(now);
-//     const startOfTomorrow = addDays(startOfToday, 1);
-//     const CUTOFF_TIME = addHours(now, 1);
-
-//     const andConditions: ScheduleWhereInput[] = [
-//         {
-//             doctorId: query.doctorId
-//         },
-//         {
-//             isDeleted: false
-//         },
-//         {
-//             status: ScheduleStatus.PUBLISHED
-//         },
-//         {
-//             startDateTime: {
-//                 gte: startOfToday,
-//                 lt: startOfTomorrow
-//             }
-//         },
-//         {
-//             availableSlots: {
-//                 gt: 0
-//             }
-//         },
-//         // This is the key part - move the logic into the query
-//         {
-//             OR: [
-//                 // Case 1: Appointment is more than 1 hour away (normal rule)
-//                 {
-//                     startDateTime: {
-//                         gt: CUTOFF_TIME
-//                     }
-//                 },
-//                 // Case 2: Appointment is within 1 hour BUT has available slots (special case)
-//                 {
-//                     AND: [
-//                         {
-//                             startDateTime: {
-//                                 gt: now,
-//                                 lte: CUTOFF_TIME
-//                             }
-//                         },
-//                         {
-//                             availableSlots: {
-//                                 gt: 0
-//                             }
-//                         }
-//                     ]
-//                 }
-//             ]
-//         }
-//     ];
-
-//     const schedules = await prisma.schedule.findMany({
-//         where: {
-//             AND: andConditions
-//         },
-//         take: limit,
-//         skip,
-//         orderBy: {
-//             [sortBy]: sortOrder
-//         }
-//     });
-
-//     const totalSchedules = await prisma.schedule.count({
-//         where: {
-//             AND: andConditions
-//         }
-//     });
-
-//     return {
-//         data: schedules,
-//         meta: {
-//             page,
-//             limit,
-//             total: totalSchedules,
-//             totalPages: Math.ceil(totalSchedules / limit)
-//         }
-//     }
-// };
 
 const getScheduleById = async (scheduleId: string) => {
 	const schedule = await prisma.schedule.findUnique({

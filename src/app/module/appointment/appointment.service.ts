@@ -1,4 +1,11 @@
-import { addMinutes, format, isBefore, isSameDay, subHours } from "date-fns";
+import {
+	addMinutes,
+	format,
+	isBefore,
+	isSameDay,
+	subHours,
+	subMinutes,
+} from "date-fns";
 import ejs from "ejs";
 import httpStatus from "http-status";
 import path from "path";
@@ -68,10 +75,25 @@ const bookAppointment = async (
 			);
 		}
 
-		if (!isBefore(now, schedule.startDateTime)) {
+		// if (!isBefore(now, schedule.startDateTime)) {
+		// 	throw new AppError(
+		// 		httpStatus.BAD_REQUEST,
+		// 		"This schedule has already started and is not available for booking.",
+		// 	);
+		// }
+
+		const bookingDeadline = subMinutes(
+			schedule.startDateTime,
+			config.booking_cutoff_minutes,
+		);
+
+		if (!isBefore(now, bookingDeadline)) {
 			throw new AppError(
 				httpStatus.BAD_REQUEST,
-				"This schedule has already started and is not available for booking.",
+				`Booking for this schedule closed at ${format(
+					bookingDeadline,
+					"hh:mm a",
+				)}. Please book another day.`,
 			);
 		}
 
