@@ -1153,6 +1153,7 @@ const getMyAppointments = async (query: IQuery, user: RequestUser) => {
 					contactNumber: true,
 				},
 			},
+			doctor: true,
 			schedule: true,
 			payment: true,
 		},
