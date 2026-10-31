@@ -9,19 +9,20 @@ import {
 	seedTesterAdmin,
 	seedTesterDoctor,
 } from "./app/utils/seed";
+import logger from "./app/logger";
 
 const PORT = config.port;
 
 const main = async () => {
 	try {
 		await prisma.$connect();
-		console.log("Connected to the database successfully.");
+		logger.info("Connected to the database successfully.");
 
 		await redisClient.connect();
-		console.log("Redis Connected Successfully.");
+		logger.info("Redis Connected Successfully.");
 
 		await transporter.verify();
-		console.log("Nodemailer Connected Successfully.");
+		logger.info("Nodemailer Connected Successfully.");
 
 		await seedSuperAdmin();
 		await seedTesterAdmin();
@@ -29,11 +30,45 @@ const main = async () => {
 
 		await deleteUnverifiedDoctors();
 
-		app.listen(PORT, () => {
-			console.log(`Server is running on port ${PORT}`);
+		const server = app.listen(PORT, () => {
+			logger.info(`Server is running on port ${PORT}`);
+		});
+
+		// Graceful shutdown
+		const shutdown = (signal: string) => {
+			logger.info(`${signal} received. Shutting down gracefully...`);
+			server.close(async () => {
+				try {
+					await prisma.$disconnect();
+					await redisClient.disconnect();
+					logger.info("Database and Redis disconnected. Exiting.");
+					process.exit(0);
+				} catch (error) {
+					logger.error("Error during graceful shutdown:", error);
+					process.exit(1);
+				}
+			});
+
+			// Force shutdown after 10 seconds
+			setTimeout(() => {
+				logger.error("Forced shutdown after timeout");
+				process.exit(1);
+			}, 10000);
+		};
+
+		process.on("SIGINT", () => shutdown("SIGINT"));
+		process.on("SIGTERM", () => shutdown("SIGTERM"));
+
+		process.on("unhandledRejection", (reason) => {
+			logger.error("Unhandled Rejection:", reason);
+		});
+
+		process.on("uncaughtException", (error) => {
+			logger.error("Uncaught Exception:", error);
+			process.exit(1);
 		});
 	} catch (error) {
-		console.error("Error starting the server:", error);
+		logger.error("Error starting the server:", error);
 		await prisma.$disconnect();
 		process.exit(1);
 	}

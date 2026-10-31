@@ -29,16 +29,18 @@ export const getBkashIdToken = async () => {
 			bkashRefreshToken &&
 			bkashRefreshTokenTTL > 600
 		) {
+			const headers: Record<string, string> = {
+				"Content-Type": "application/json",
+				Accept: "application/json",
+			};
+			if (config.bkash_username) headers.username = config.bkash_username;
+			if (config.bkash_password) headers.password = config.bkash_password;
+
 			const refreshTokenResponse = await fetch(
 				`${config.bkash_base_url}/tokenized/checkout/token/refresh`,
 				{
 					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						Accept: "application/json",
-						username: config.bkash_username,
-						password: config.bkash_password,
-					},
+					headers,
 					body: JSON.stringify({
 						app_key: config.bkash_app_key,
 						app_secret: config.bkash_app_secret,
@@ -72,16 +74,18 @@ export const getBkashIdToken = async () => {
 			return bkashIdToken;
 		}
 
+		const headers2: Record<string, string> = {
+			"Content-Type": "application/json",
+			Accept: "application/json",
+		};
+		if (config.bkash_username) headers2.username = config.bkash_username;
+		if (config.bkash_password) headers2.password = config.bkash_password;
+
 		const response = await fetch(
 			`${config.bkash_base_url}/tokenized/checkout/token/grant`,
 			{
 				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Accept: "application/json",
-					username: config.bkash_username,
-					password: config.bkash_password,
-				},
+				headers: headers2,
 				body: JSON.stringify({
 					app_key: config.bkash_app_key,
 					app_secret: config.bkash_app_secret,

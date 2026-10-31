@@ -166,16 +166,18 @@ const bookAppointment = async (
 			throw new AppError(httpStatus.BAD_REQUEST, "No bKash access token found");
 		}
 
+		const headersBkash: Record<string, string> = {
+			"Content-Type": "application/json",
+			Accept: "application/json",
+			Authorization: bkashIdToken,
+		};
+		if (config.bkash_app_key) headersBkash["X-App-Key"] = config.bkash_app_key;
+
 		const bkashCreatePaymentResponse = await fetch(
 			`${config.bkash_base_url}/tokenized/checkout/create`,
 			{
 				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Accept: "application/json",
-					Authorization: bkashIdToken,
-					"X-App-Key": config.bkash_app_key,
-				},
+				headers: headersBkash,
 				body: JSON.stringify({
 					mode: "0011",
 					// payerReference: "01723888888", // user email or phone number can be used as payerReference
@@ -260,16 +262,18 @@ const payAppointment = async (
 		throw new AppError(httpStatus.BAD_REQUEST, "No bKash access token found");
 	}
 
+	const headersBkashCreate: Record<string, string> = {
+		"Content-Type": "application/json",
+		Accept: "application/json",
+		Authorization: bkashIdToken,
+	};
+	if (config.bkash_app_key) headersBkashCreate["X-App-Key"] = config.bkash_app_key;
+
 	const bkashCreatePaymentResponse = await fetch(
 		`${config.bkash_base_url}/tokenized/checkout/create`,
 		{
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Accept: "application/json",
-				Authorization: bkashIdToken,
-				"X-App-Key": config.bkash_app_key,
-			},
+			headers: headersBkashCreate,
 			body: JSON.stringify({
 				mode: "0011",
 				// payerReference: "01723888888", // user email or phone number can be used as payerReference
@@ -322,16 +326,18 @@ const bookAppointmentCallback = async (query: Record<string, any>) => {
 			throw new AppError(httpStatus.BAD_REQUEST, "No bKash access token found");
 		}
 
+		const headersExecute2: Record<string, string> = {
+			"Content-Type": "application/json",
+			Accept: "application/json",
+			Authorization: bkashIdToken,
+		};
+		if (config.bkash_app_key) headersExecute2["X-App-Key"] = config.bkash_app_key;
+
 		const executedPaymentResponse = await fetch(
 			`${config.bkash_base_url}/tokenized/checkout/execute`,
 			{
 				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Accept: "application/json",
-					Authorization: bkashIdToken,
-					"X-App-Key": config.bkash_app_key,
-				},
+				headers: headersExecute2,
 				body: JSON.stringify({
 					paymentID: paymentId,
 				}),
@@ -956,16 +962,18 @@ const cancelAppointment = async (
 				);
 			}
 
+			const headersRefund: Record<string, string> = {
+				"Content-Type": "application/json",
+				Accept: "application/json",
+				Authorization: bkashIdToken,
+			};
+			if (config.bkash_app_key) headersRefund["X-App-Key"] = config.bkash_app_key;
+
 			const bkashRefundPaymentResponse = await fetch(
 				`${config.bkash_base_url}/tokenized/checkout/payment/refund`,
 				{
 					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						Accept: "application/json",
-						Authorization: bkashIdToken,
-						"X-App-Key": config.bkash_app_key,
-					},
+					headers: headersRefund,
 					body: JSON.stringify({
 						paymentID: existingAppointment.payment?.bkashPaymentId,
 						trxID: existingAppointment.payment?.bkashTrxId,

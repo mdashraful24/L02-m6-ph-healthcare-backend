@@ -3,6 +3,7 @@ import httpStatus from "http-status";
 import { Prisma } from "../../generated/prisma/client";
 import config from "../config";
 import { AppError } from "../utils/AppError";
+import logger from "../logger";
 
 export const globalErrorHandler = async (
 	err: any,
@@ -11,7 +12,13 @@ export const globalErrorHandler = async (
 	_next: NextFunction,
 ) => {
 	if (config.node_env === "development") {
-		console.log("Error from Global Error Handler", err);
+		logger.error("Error from Global Error Handler", { error: err });
+	} else {
+		logger.error("Error occurred", {
+			message: err.message,
+			name: err.name,
+			stack: err.stack,
+		});
 	}
 
 	let statusCode: number = httpStatus.INTERNAL_SERVER_ERROR;
