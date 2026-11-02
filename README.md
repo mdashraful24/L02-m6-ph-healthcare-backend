@@ -35,7 +35,7 @@ This repository contains the **backend only** (the frontend is a separate repo).
 | Payments    | bKash Tokenized Checkout API                                                |
 | Scheduling  | node-cron (auto-cleans unverified doctor applications)                      |
 | Dates       | date-fns                                                                    |
-| Tooling     | Biome (lint/format), tsx (dev runner)                                       |
+| Tooling     | Biome (lint/format), tsx (dev runner), Bun (package manager)                |
 
 ---
 
@@ -127,6 +127,7 @@ External services you need to be able to reach at runtime:
 
 | Tool          | Version | Check with |
 | ------------- | ------- | ---------- |
+| Bun           | 1.4+    | `bun -v`   |
 | Node.js       | 20+     | `node -v`  |
 | PostgreSQL    | 14+     | `psql -V`  |
 | Redis         | 6+      | `redis-cli ping` |
@@ -138,7 +139,7 @@ A Gmail account (or any SMTP server) is also required so the app can send OTP/em
 **1. Install dependencies**
 
 ```bash
-npm install
+bun install
 ```
 
 **2. Set up your environment**
@@ -152,7 +153,7 @@ Open `.env` and fill in every value. At minimum `DATABASE_URL`, the JWT secrets/
 **3. Generate the Prisma client**
 
 ```bash
-npx prisma generate
+bunx prisma generate
 ```
 
 Prisma writes a typed client into `src/generated/prisma` (git-ignored). Almost every file under `src/` imports from there — skip this step and nothing compiles. Re-run whenever you change a file in `prisma/schema/`.
@@ -160,13 +161,13 @@ Prisma writes a typed client into `src/generated/prisma` (git-ignored). Almost e
 **4. Apply the migrations**
 
 ```bash
-npx prisma migrate dev
+bunx prisma migrate dev
 ```
 
 **5. Start the server**
 
 ```bash
-npm run dev
+bun run dev
 ```
 
 You should see:
@@ -190,24 +191,24 @@ curl http://localhost:5000/
 ### Useful scripts
 
 ```bash
-npm run dev          # start with auto-reload (tsx watch)
-npm run build        # typecheck with tsc and emit to dist/
-npm run start        # run the server once, no watching
-npm run lint:check   # Biome lint on ./src
-npm run lint:fix     # Biome lint + autofix
-npm run format:check # Biome format check
-npm run format:fix   # Biome format + write
+bun run dev          # start with auto-reload (tsx watch)
+bun run build        # typecheck with tsc and emit to dist/
+bun run start        # run the server once, no watching
+bun run lint:check   # Biome lint on ./src
+bun run lint:fix     # Biome lint + autofix
+bun run format:check # Biome format check
+bun run format:fix   # Biome format + write
 ```
 
-Prisma CLI shortcuts (no npm wrappers exist):
+Prisma CLI shortcuts (no Bun wrappers exist):
 
 ```bash
-npx prisma generate     # regenerate the client after schema changes
-npx prisma migrate dev  # create + apply migrations
-npx prisma studio       # browser GUI for your data at http://localhost:5555
+bunx prisma generate     # regenerate the client after schema changes
+bunx prisma migrate dev  # create + apply migrations
+bunx prisma studio       # browser GUI for your data at http://localhost:5555
 ```
 
-> **Note:** `npm run build` emits to `dist/`, but the output isn't directly runnable with Node because the codebase uses extensionless relative imports. `npm run start` therefore runs the TypeScript source through `tsx` instead of `dist/`.
+> **Note:** `bun run build` emits to `dist/`, but the output isn't directly runnable with Node because the codebase uses extensionless relative imports. `bun run start` therefore runs the TypeScript source through `tsx` instead of `dist/`.
 
 ---
 
