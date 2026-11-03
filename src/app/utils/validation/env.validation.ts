@@ -65,6 +65,11 @@ const envSchema = z.object({
 			z.number().int().nonnegative(),
 		)
 		.default(30),
+
+	OPENROUTER_API_KEY: z.string().optional(),
+	OPENROUTER_CHAT_MODEL: z.string().optional(),
+	OPENROUTER_FALLBACK_CHAT_MODEL: z.string().optional(),
+	OPENROUTER_EMBEDDING_MODEL: z.string().optional(),
 });
 
 export type EnvConfig = z.infer<typeof envSchema>;

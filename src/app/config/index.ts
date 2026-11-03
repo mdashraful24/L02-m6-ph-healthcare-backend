@@ -56,4 +56,9 @@ export default {
 	bkash_callback_url: env.BKASH_CALLBACK_URL,
 
 	booking_cutoff_minutes: env.BOOKING_CUTOFF_MINUTES,
+
+	openrouter_api_key: env.OPENROUTER_API_KEY,
+	openrouter_chat_model: env.OPENROUTER_CHAT_MODEL,
+	openrouter_fallback_chat_model: env.OPENROUTER_FALLBACK_CHAT_MODEL,
+	openrouter_embedding_model: env.OPENROUTER_EMBEDDING_MODEL,
 };
