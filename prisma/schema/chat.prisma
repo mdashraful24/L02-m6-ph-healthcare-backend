@@ -1,8 +1,0 @@
-model DoctorEmbedding {
-    id        String   @id @default(dbgenerated("gen_random_uuid()"))
-    content   String?
-    metadata  Json?
-    embedding Unsupported("vector")
-
-    @@map("doctor_embeddings")
-}
