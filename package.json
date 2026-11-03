@@ -11,6 +11,7 @@
         "build": "tsc",
         "start": "node dist/src/server.js",
         "test": "echo \"Error: no test specified\" && exit 1",
+        "test:openrouter": "tsx src/app/scripts/testOpenRouter.ts",
         "format:check": "biome format ./src",
         "format:fix": "biome format --write ./src",
         "lint:check": "biome lint ./src",

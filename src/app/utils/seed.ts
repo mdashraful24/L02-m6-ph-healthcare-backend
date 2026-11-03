@@ -4,6 +4,7 @@ import { Role } from "../../generated/prisma/enums";
 import config from "../config";
 import { prisma } from "../lib/prisma";
 import { AppError } from "./AppError";
+import logger from "../logger";
 
 export const seedSuperAdmin = async () => {
 	try {
@@ -14,7 +15,7 @@ export const seedSuperAdmin = async () => {
 		});
 
 		if (isSuperAdminExist) {
-			console.log("Super Admin Already Exists!");
+			logger.info("Super Admin Already Exists!");
 			return;
 		}
 
@@ -45,7 +46,7 @@ export const seedSuperAdmin = async () => {
 			},
 		});
 
-		console.log("Super Admin Created : ", superAdmin);
+		logger.info("Super Admin Created", superAdmin);
 	} catch (error) {
 		console.log("Error Seeding Super Admin : ", error);
 
@@ -66,7 +67,7 @@ export const seedTesterAdmin = async () => {
 		});
 
 		if (isTesterAdminExist) {
-			console.log("Tester Admin Already Exists!");
+			logger.info("Tester Admin Already Exists!");
 			return;
 		}
 
@@ -97,7 +98,7 @@ export const seedTesterAdmin = async () => {
 			},
 		});
 
-		console.log("Tester Admin Created : ", testerAdmin);
+		logger.info("Tester Admin Created", testerAdmin);
 	} catch (error) {
 		console.log("Error Seeding Tester Admin : ", error);
 
@@ -118,7 +119,7 @@ export const seedTesterDoctor = async () => {
 		});
 
 		if (isTesterDoctorExist) {
-			console.log("Tester Doctor Already Exists!");
+			logger.info("Tester Doctor Already Exists!");
 			return;
 		}
 
@@ -161,7 +162,7 @@ export const seedTesterDoctor = async () => {
 			},
 		});
 
-		console.log("Tester Doctor Created : ", testerDoctor);
+		logger.info("Tester Doctor Created", testerDoctor);
 	} catch (error) {
 		console.log("Error Seeding Tester Doctor : ", error);
 
