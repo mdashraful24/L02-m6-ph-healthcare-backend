@@ -138,6 +138,21 @@
                 }
               },
               "response": []
+            },
+            {
+              "name": "Logout",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/auth/logout",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "5000",
+                  "path": ["api", "v1", "auth", "logout"]
+                }
+              },
+              "response": []
             }
           ]
         },
@@ -629,6 +644,28 @@
           "response": []
         },
         {
+          "name": "Get Today's Schedules (Public) [Correct Path]",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/schedule/todays-schedule?doctorId=doctor-uuid-here&page=1&limit=10&sortBy=startDateTime&sortOrder=asc",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "schedule", "todays-schedule"],
+              "query": [
+                { "key": "doctorId", "value": "doctor-uuid-here", "description": "Doctor UUID (required)" },
+                { "key": "page", "value": "1", "description": "Page number" },
+                { "key": "limit", "value": "10", "description": "Items per page" },
+                { "key": "sortBy", "value": "startDateTime", "description": "Sort field" },
+                { "key": "sortOrder", "value": "asc", "description": "asc or desc" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Get Schedule By ID",
           "request": {
             "method": "GET",
@@ -774,6 +811,25 @@
               "host": ["localhost"],
               "port": "5000",
               "path": ["api", "v1", "appointment", "pay-appointment"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Book Appointment Payment Callback",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/appointment/book-appointment/payment/callback?paymentID=payment-id-here&status=success",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "appointment", "book-appointment", "payment", "callback"],
+              "query": [
+                { "key": "paymentID", "value": "payment-id-here", "description": "bKash paymentID returned by the gateway" },
+                { "key": "status", "value": "success", "description": "Payment status returned by the gateway (success/failure/cancel)" }
+              ]
             }
           },
           "response": []
@@ -1097,6 +1153,55 @@
               "host": ["localhost"],
               "port": "5000",
               "path": ["api", "v1", "analytics", "admin-analytics"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Chat",
+      "item": [
+        {
+          "name": "Send Chat Message (RAG)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"message\": \"I need a cardiologist in Dhaka\",\n    \"sessionId\": \"session-uuid-here\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/chat/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "chat", ""]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "System",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["health"]
             }
           },
           "response": []

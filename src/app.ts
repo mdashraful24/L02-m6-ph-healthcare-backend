@@ -28,6 +28,7 @@ import { PrescriptionRoutes } from "./app/module/prescription/prescription.route
 import { AnalyticsRoutes } from "./app/module/analytics/analytics.route";
 import { requestLogger } from "./app/middleware/requestLogger";
 import path from "path";
+import { ChatRoutes } from "./app/module/chat/chat.routes";
 
 const app: Application = express();
 
@@ -100,6 +101,8 @@ app.use("/api/v1/schedule", ScheduleRoutes);
 app.use("/api/v1/payment", PaymentRoute);
 app.use("/api/v1/prescription", PrescriptionRoutes);
 app.use("/api/v1/analytics", AnalyticsRoutes);
+// RAG implemented chat routes
+app.use("/api/v1/chat", ChatRoutes);
 
 // Testing - only available in development
 if (config.node_env !== "production") {

@@ -1,0 +1,2 @@
+{"timestamp":"2026-11-08T12:08:01.388Z","method":"POST","endpoint":"/api/v1/chat/","statusCode":500,"responseTimeMs":3176.9,"ip":"::1","userAgent":"PostmanRuntime/2.15.0"}
+{"timestamp":"2026-11-08T12:13:28.203Z","method":"POST","endpoint":"/api/v1/chat/","statusCode":200,"responseTimeMs":5005.55,"ip":"::1","userAgent":"PostmanRuntime/2.15.0"}
