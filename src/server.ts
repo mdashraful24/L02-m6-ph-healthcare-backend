@@ -1,6 +1,6 @@
 import app from "./app";
 import config from "./app/config";
-import { deleteUnverifiedDoctors } from "./app/lib/cron";
+import { deleteUnverifiedDoctors, reindexDoctorEmbeddings } from "./app/lib/cron";
 import { transporter } from "./app/lib/nodemailer";
 import { prisma } from "./app/lib/prisma";
 import { redisClient } from "./app/lib/redis";
@@ -10,6 +10,8 @@ import {
 	seedTesterDoctor,
 } from "./app/utils/seed";
 import logger from "./app/logger";
+import { seedDoctors } from "./app/utils/seedDoctors";
+import { reIndexAllDoctors } from "./app/module/chat/chat.indexer";
 
 const PORT = config.port;
 
@@ -28,7 +30,12 @@ const main = async () => {
 		await seedTesterAdmin();
 		await seedTesterDoctor();
 
+		await seedDoctors();
+
+		// await reIndexAllDoctors();
+
 		await deleteUnverifiedDoctors();
+		await reindexDoctorEmbeddings();
 
 		const server = app.listen(PORT, () => {
 			logger.info(`Server is running on port ${PORT}`);

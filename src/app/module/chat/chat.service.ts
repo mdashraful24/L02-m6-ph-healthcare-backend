@@ -1,7 +1,7 @@
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { redisClient } from "../../lib/redis";
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
-import { CHAT_SYSTEM_PROMPT } from "./chat.prompt";
+import { CHAT_SYSTEM_PROMPT, CONDENSE_QUESTION_PROMPT } from "./chat.prompt";
 import { chatModel } from "../../lib/llm";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { vectorStore } from "../../lib/vectorStore";
@@ -19,7 +19,7 @@ const HISTORY_TTL_SECONDS = 60 * 60;
 
 type TStoreMessage = { role: "human" | "ai"; content: string }
 
-const historyKey = (sessionId: string) => `chat:session: ${sessionId}`
+const historyKey = (sessionId: string) => `chat:session:${sessionId}`
 
 const getHistory = async (sessionId: string): Promise<TStoreMessage[]> => {
     const raw = await redisClient.get(historyKey(sessionId))
@@ -42,7 +42,7 @@ const toLangChainMessages = (history: TStoreMessage[]) =>
     );
 
 const condenseQuestionChain = ChatPromptTemplate.fromMessages([
-    ["system", CHAT_SYSTEM_PROMPT],
+    ["system", CONDENSE_QUESTION_PROMPT],
     new MessagesPlaceholder("history"),
     ["human", "{question}"]
 ]).pipe(chatModel).pipe(new StringOutputParser())
@@ -118,7 +118,9 @@ const buildContext = (doctors: TChatDoctor[]) => {
     }
 
     return doctors.map((doctor, index) => {
-        const schedules = doctor?.schedules.length ? doctor.schedules.map(schedule => `- ${format(schedule.startDateTime, "h:mm a")} - ${format(schedule.endDateTime, "h:mm a")} (${schedule.availableSlots} slots left)`).join(", ") : "No open schedules today.";
+        const schedules = doctor?.schedules.length
+            ? doctor.schedules
+                .map((schedule) => `${format(schedule.startDateTime, "h:mm a")} - ${format(schedule.endDateTime, "h:mm a")} (${schedule.availableSlots} slots left)`).join(", ") : "No open schedules today.";
 
         const fee = doctor?.consultationFee ? `Consultation Fee: $${doctor.consultationFee.toString()} BDT` : "Consultation Fee: Not specified";
 

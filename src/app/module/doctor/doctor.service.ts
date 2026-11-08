@@ -26,6 +26,7 @@ import type {
 	IResendDoctorOtpPayload,
 	IVerifyDoctorEmailPayload,
 } from "./doctor.validation";
+import { upsertDoctorEmbedding } from "../chat/chat.indexer";
 
 const applyAsDoctor = async (
 	payload: IApplyAsDoctor,
@@ -350,6 +351,8 @@ const approveDoctor = async (
 			...(hashedPassword ? { user: { update: { password: hashedPassword } } } : {}),
 		},
 	});
+
+	syncDoctorEmbedding(updatedDoctor.id);
 
 	const templatePath = path.join(
 		process.cwd(),
@@ -803,7 +806,13 @@ const updateDoctorProfile = async (
 		data: payload,
 	});
 
+	syncDoctorEmbedding(updatedDoctor.id);
+
 	return updatedDoctor;
+};
+
+const syncDoctorEmbedding = (doctorId: string) => {
+	upsertDoctorEmbedding(doctorId).catch((error) => console.error("Chat: failed to index doctor", error));
 };
 
 export const DoctorServices = {

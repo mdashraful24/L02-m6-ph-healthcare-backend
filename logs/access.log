@@ -1,2 +1,11 @@
 {"timestamp":"2026-11-08T12:08:01.388Z","method":"POST","endpoint":"/api/v1/chat/","statusCode":500,"responseTimeMs":3176.9,"ip":"::1","userAgent":"PostmanRuntime/2.15.0"}
 {"timestamp":"2026-11-08T12:13:28.203Z","method":"POST","endpoint":"/api/v1/chat/","statusCode":200,"responseTimeMs":5005.55,"ip":"::1","userAgent":"PostmanRuntime/2.15.0"}
+{"timestamp":"2026-11-08T12:44:41.427Z","method":"GET","endpoint":"/","statusCode":200,"responseTimeMs":13.35,"ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"}
+{"timestamp":"2026-11-08T12:44:41.648Z","method":"GET","endpoint":"/favicon.ico","statusCode":404,"responseTimeMs":2.25,"ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"}
+{"timestamp":"2026-11-08T12:44:50.762Z","method":"GET","endpoint":"/","statusCode":304,"responseTimeMs":1.04,"ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"}
+{"timestamp":"2026-11-08T12:44:51.744Z","method":"GET","endpoint":"/","statusCode":304,"responseTimeMs":2.19,"ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"}
+{"timestamp":"2026-11-08T12:46:49.736Z","method":"POST","endpoint":"/api/v1/chat/","statusCode":200,"responseTimeMs":7190.96,"ip":"::1","userAgent":"PostmanRuntime/2.15.0"}
+{"timestamp":"2026-11-08T12:48:16.330Z","method":"POST","endpoint":"/api/v1/chat/","statusCode":200,"responseTimeMs":5501,"ip":"::1","userAgent":"PostmanRuntime/2.15.0"}
+{"timestamp":"2026-11-08T13:27:24.493Z","method":"POST","endpoint":"/api/v1/chat/","statusCode":200,"responseTimeMs":6261.78,"ip":"::1","userAgent":"PostmanRuntime/2.15.0"}
+{"timestamp":"2026-11-08T14:00:39.957Z","method":"POST","endpoint":"/api/v1/chat/","statusCode":200,"responseTimeMs":12455.76,"ip":"::1","userAgent":"PostmanRuntime/2.15.0"}
+{"timestamp":"2026-11-08T14:01:53.400Z","method":"POST","endpoint":"/api/v1/chat/","statusCode":200,"responseTimeMs":8358.66,"ip":"::1","userAgent":"PostmanRuntime/2.15.0"}
